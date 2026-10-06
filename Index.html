@@ -1,0 +1,2862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CompTIA SecurityX (CAS-005) Master Trainer</title>
+    <style>
+        :root {
+            --bg-base: #090d16;
+            --bg-card: #131c2e;
+            --bg-card-back: #18243b;
+            --accent-cyan: #38bdf8;
+            --accent-cyan-glow: rgba(56, 189, 248, 0.25);
+            --accent-green: #10b981;
+            --accent-red: #f43f5e;
+            --accent-amber: #f59e0b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(19, 28, 46, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 720px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* App Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #f8fafc 30%, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .view-toggle {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .view-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Progress Bar */
+        .progress-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .progress-stats .stat-item span {
+            color: var(--accent-cyan);
+        }
+
+        .bar-outer {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-inner {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+            border-radius: 4px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Controls */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        select, input {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--accent-cyan-glow);
+        }
+
+        /* Flashcard Stage */
+        .stage {
+            perspective: 1200px;
+            width: 100%;
+            height: 440px;
+            margin: 6px 0;
+            position: relative;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-front {
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, var(--bg-card) 100%);
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card-front .acronym {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: #ffffff;
+            text-shadow: 0 0 30px var(--accent-cyan-glow);
+            margin: 20px 0;
+        }
+
+        .card-front .tap-hint {
+            position: absolute;
+            bottom: 20px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: var(--bg-card-back);
+            overflow-y: auto;
+            text-align: left;
+            gap: 12px;
+            justify-content: flex-start;
+        }
+
+        .card-back::-webkit-scrollbar {
+            width: 4px;
+        }
+        .card-back::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.15);
+            border-radius: 4px;
+        }
+
+        .card-back-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 4px;
+        }
+
+        .card-back-header h2 {
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .card-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--accent-amber);
+        }
+
+        .card-section-body {
+            font-size: 0.88rem;
+            line-height: 1.45;
+            color: var(--text-primary);
+        }
+
+        .hook-box {
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 10px 12px;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+        }
+
+        /* Action Buttons */
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-fail {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+        .btn-fail:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .btn-pass {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-pass:hover {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        /* Keyboard Hints */
+        .key-hints {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .key {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+
+        /* Table View Mode */
+        .table-container {
+            display: none;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow-x: auto;
+            max-height: 500px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(255,255,255,0.03);
+            color: var(--accent-cyan);
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(8px);
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .table-acronym {
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="brand">
+                <h1>SecurityX CAS-005</h1>
+                <span>Executive Acronym Deck</span>
+            </div>
+            <button class="view-toggle" onclick="toggleViewMode()" id="view-mode-btn">Table View</button>
+        </header>
+
+        <!-- Progress Tracker -->
+        <div class="progress-card">
+            <div class="progress-stats">
+                <div class="stat-item">Mastered: <span id="stat-mastered">0</span></div>
+                <div class="stat-item">Remaining: <span id="stat-remaining">0</span></div>
+                <div class="stat-item">Total: <span id="stat-total">0</span></div>
+            </div>
+            <div class="bar-outer">
+                <div class="bar-inner" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-grid">
+            <select id="domain-filter" onchange="applyFilters()">
+                <option value="ALL">All Domains</option>
+                <option value="Domain 1.0">Domain 1.0: GRC</option>
+                <option value="Domain 2.0">Domain 2.0: Security Architecture</option>
+                <option value="Domain 3.0">Domain 3.0: Security Engineering</option>
+                <option value="Domain 4.0">Domain 4.0: Security Operations</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Search acronym or keyword..." oninput="applyFilters()">
+        </div>
+
+        <!-- Flashcard View Stage -->
+        <div id="flashcard-view">
+            <div class="stage">
+                <div class="card" id="card" onclick="flipCard()">
+                    <!-- Front -->
+                    <div class="card-front">
+                        <span class="badge" id="card-domain">Domain</span>
+                        <div class="acronym" id="card-acronym">ACRONYM</div>
+                        <div class="tap-hint">Tap card or press SPACE to flip ↺</div>
+                    </div>
+                    <!-- Back -->
+                    <div class="card-back">
+                        <div class="card-back-header">
+                            <span class="badge" id="card-back-domain" style="position:static; display:inline-block; margin-bottom:6px;">Domain</span>
+                            <h2 id="card-title">Full Expansion</h2>
+                        </div>
+                        <div class="card-section">
+                            <div class="card-section-title">Plain English Concept</div>
+                            <div class="card-section-body" id="card-concept">Concept description...</div>
+                        </div>
+                        <div class="card-section">
+                            <div class="card-section-title">Why SecurityX Cares</div>
+                            <div class="card-section-body" id="card-context">Security context...</div>
+                        </div>
+                        <div class="card-section">
+                            <div class="card-section-title">Memory Hook</div>
+                            <div class="hook-box" id="card-hook">Memory hook...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-row">
+                <button class="btn btn-fail" onclick="markCard(false, event)">
+                    <span>✕</span> Review (←)
+                </button>
+                <button class="btn btn-pass" onclick="markCard(true, event)">
+                    <span>✓</span> Mastered (→)
+                </button>
+            </div>
+
+            <!-- Shortcuts Bar -->
+            <div class="key-hints">
+                <span><span class="key">Space</span> Flip</span>
+                <span><span class="key">←</span> Review</span>
+                <span><span class="key">→</span> Mastered</span>
+            </div>
+        </div>
+
+        <!-- Table View Stage -->
+        <div class="table-container" id="table-view">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Acronym</th>
+                        <th>Expansion</th>
+                        <th>Domain</th>
+                        <th>Concept</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Dynamic insertion -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. DATA BATCH INJECTION SYSTEM
+        // ==========================================
+
+        // PRE-LOADED: BATCH 1 (Cloud Security & DevSecOps Architecture)
+        const batch1Data = [
+            {
+                acronym: "API",
+                expansion: "Application Programming Interface",
+                domain: "Domain 2.0",
+                concept: "A set of protocols allowing software applications to communicate and exchange data securely.",
+                context: "SecurityX focuses on API security controls (OAuth2, rate limiting, MTLS, schema validation) to prevent BOLA, shadow APIs, and data exfiltration.",
+                hook: "The standardized waiter taking orders between the client kitchen and server database."
+            },
+            {
+                acronym: "CaC",
+                expansion: "Configuration as Code",
+                domain: "Domain 3.0",
+                concept: "Managing system configurations and OS policies using version-controlled text files.",
+                context: "Ensures declarative, repeatable, and audited system configurations across environments, eliminating manual configuration drift.",
+                hook: "Saving your server setup as a text document that can be replayed anywhere."
+            },
+            {
+                acronym: "CASB",
+                expansion: "Cloud Access Security Broker",
+                domain: "Domain 2.0",
+                concept: "A security checkpoint placed between cloud users and SaaS applications to enforce governance.",
+                context: "Crucial for visibility into Shadow IT, SaaS DLP enforcement, malware inspection, and conditional access policies for remote workers.",
+                hook: "The inspector standing between your employees and public cloud SaaS applications."
+            },
+            {
+                acronym: "CDN",
+                expansion: "Content Delivery Network",
+                domain: "Domain 2.0",
+                concept: "A geographically distributed network of proxy servers that caches web content close to end users.",
+                context: "Used for web performance optimization and as the frontline perimeter defense against large-scale Layer 7 DDoS attacks.",
+                hook: "A chain of local satellite warehouses stocking popular items so the main factory isn't overwhelmed."
+            },
+            {
+                acronym: "CI/CD",
+                expansion: "Continuous Integration/Continuous Deployment",
+                domain: "Domain 3.0",
+                concept: "An automated pipeline method for frequently delivering software updates by automating build, test, and deployment.",
+                context: "SecurityX emphasizes embedding automated security checks (SAST, SCA, container scanning) directly into the pipeline ('Shift Left').",
+                hook: "An assembly line that automatically quality-checks each auto part before installing it on the car."
+            },
+            {
+                acronym: "CNAPP",
+                expansion: "Cloud-native Application Protection Platform",
+                domain: "Domain 2.0",
+                concept: "A unified platform consolidating posture management (CSPM), container security, and workload protection (CWPP).",
+                context: "Replaces fragmented cloud tools to provide end-to-end cloud lifecycle visibility from code repository to runtime.",
+                hook: "The central control room managing both the building exterior walls and the tenants living inside."
+            },
+            {
+                acronym: "COTS",
+                expansion: "Commercial-off-the-shelf",
+                domain: "Domain 1.0",
+                concept: "Ready-made software products available for purchase by the general public rather than custom-developed solutions.",
+                context: "Requires rigorous vendor risk assessments, third-party patch dependency tracking, and supply chain vulnerability analysis.",
+                hook: "Buying a pre-built house instead of hiring contractors to build one custom from scratch."
+            },
+            {
+                acronym: "CSPM",
+                expansion: "Cloud Security Posture Management",
+                domain: "Domain 2.0",
+                concept: "An automated scanner that continuously audits cloud infrastructure for misconfigurations and compliance drift.",
+                context: "Focuses on cloud control plane compliance (AWS/Azure/GCP settings) against standards like CIS benchmarks or PCI DSS.",
+                hook: "The building inspector walking around checking if any exterior doors or windows were left unlocked."
+            },
+            {
+                acronym: "CWPP",
+                expansion: "Cloud Workload Protection Platform",
+                domain: "Domain 3.0",
+                concept: "Security software tailored to protect compute instances, VMs, containers, and serverless functions.",
+                context: "Focuses on runtime memory defense, file integrity, and process monitoring inside active compute instances across multi-cloud environments.",
+                hook: "The bodyguard standing inside the room directly protecting the high-value asset."
+            },
+            {
+                acronym: "DAST",
+                expansion: "Dynamic Application Security Testing",
+                domain: "Domain 3.0",
+                concept: "Black-box security testing that attacks a running application from the outside without source code knowledge.",
+                context: "Identifies operational runtime flaws, session management weaknesses, and server misconfigurations late in staging/production.",
+                hook: "Rattling the door handles and picking the front door lock on a fully constructed building."
+            },
+            {
+                acronym: "IaaS",
+                expansion: "Infrastructure as a Service",
+                domain: "Domain 2.0",
+                concept: "Cloud service model providing virtualized compute, networking, and storage resources over the internet.",
+                context: "Under Shared Responsibility, the cloud provider manages physical hardware while customer secures OS, software, and data.",
+                hook: "Renting raw land and building your own house from the foundation up."
+            },
+            {
+                acronym: "IaC",
+                expansion: "Infrastructure as Code",
+                domain: "Domain 3.0",
+                concept: "Provisioning and managing cloud infrastructure using machine-readable configuration files (e.g., Terraform).",
+                context: "Allows security teams to lint templates for flaws (e.g., open S3 buckets) before resources are actually provisioned.",
+                hook: "Constructing an entire physical datacenter using a printed 3D-printer blueprint."
+            },
+            {
+                acronym: "IAST",
+                expansion: "Interactive Application Security Testing",
+                domain: "Domain 3.0",
+                concept: "Hybrid application testing using internal software agents while dynamic functional tests execute.",
+                context: "Combines code visibility (SAST) with execution context (DAST) to significantly reduce false positives in test environments.",
+                hook: "Having a diagnostic sensor inside the car engine while executing a high-speed test drive."
+            },
+            {
+                acronym: "IDE",
+                expansion: "Integrated Development Environment",
+                domain: "Domain 3.0",
+                concept: "A software application providing editing, debugging, and compiling facilities to developers.",
+                context: "Security plugins embedded in the IDE provide real-time code analysis ('Shift Left'), warning developers as they type code.",
+                hook: "A smart word processor that highlights security vulnerabilities like typos as you type."
+            },
+            {
+                acronym: "PaaS",
+                expansion: "Platform as a Service",
+                domain: "Domain 2.0",
+                concept: "Cloud model providing a hardware and software framework for developers without managing the underlying OS.",
+                context: "The provider manages hardware, network, OS, and runtime; customer is responsible solely for app code and data security.",
+                hook: "Renting a fully furnished commercial kitchen where you only bring your own ingredients and recipes."
+            },
+            {
+                acronym: "RASP",
+                expansion: "Runtime Application Self-Protection",
+                domain: "Domain 3.0",
+                concept: "Security technology embedded inside an app runtime that automatically detects and blocks real-time attacks.",
+                context: "Intercepts application calls directly in memory, mitigating zero-day attacks without requiring perimeter signatures.",
+                hook: "An internal immune system embedded inside software code that kills bad microbes on contact."
+            },
+            {
+                acronym: "SaaS",
+                expansion: "Software as a Service",
+                domain: "Domain 2.0",
+                concept: "Cloud service model delivering complete, hosted software applications to users over a web browser.",
+                context: "The vendor handles almost the entire stack; customer responsibility is limited to access management and data security.",
+                hook: "Renting a hotel room where cleaning, maintenance, and utility bills are handled entirely by hotel staff."
+            },
+            {
+                acronym: "SASE",
+                expansion: "Secure Access Service Edge",
+                domain: "Domain 2.0",
+                concept: "Framework combining software-defined networking (SD-WAN) and cloud security services (SWG, CASB, ZTNA).",
+                context: "Enables identity-centric, zero-trust secure access for remote workers without backhauling traffic through a central VPN.",
+                hook: "Merging your highway toll booth and your vehicle inspection station into a single cloud platform."
+            },
+            {
+                acronym: "SAST",
+                expansion: "Static Application Security Testing",
+                domain: "Domain 3.0",
+                concept: "White-box security testing analyzing application source code or binaries at rest without executing the program.",
+                context: "Used early in development (CI/CD pipelines) to detect hardcoded credentials, buffer overflows, and improper input sanitization.",
+                hook: "Proofreading the structural architecture blueprints before any concrete is poured."
+            },
+            {
+                acronym: "SBOM",
+                expansion: "Software Bill of Materials",
+                domain: "Domain 1.0",
+                concept: "A formal inventory detailing all third-party components, open-source libraries, and module dependencies in software.",
+                context: "Vital for supply chain risk mitigation; enables instant cross-referencing when zero-day vulnerabilities emerge in open-source packages.",
+                hook: "The printed ingredient label on a package detailing every raw component inside."
+            },
+            {
+                acronym: "SCA",
+                expansion: "Software Composition Analysis",
+                domain: "Domain 3.0",
+                concept: "An automated tool that scans open-source dependencies and third-party libraries for known vulnerabilities.",
+                context: "Identifies vulnerable third-party modules (e.g., Log4j) embedded deep within software projects before binary compilation.",
+                hook: "Checking food supply ingredients against an official recall list before serving dinner."
+            },
+            {
+                acronym: "SDK",
+                expansion: "Software Development Kit",
+                domain: "Domain 3.0",
+                concept: "A downloadable set of software development tools, libraries, and APIs used to build applications.",
+                context: "Must be audited for embedded vulnerabilities, malicious third-party dependencies, or outdated cryptographic implementations.",
+                hook: "A pre-assembled toolbox provided by a manufacturer containing special tools for building their furniture."
+            },
+            {
+                acronym: "SDLC",
+                expansion: "Software Development Life Cycle",
+                domain: "Domain 3.0",
+                concept: "A structured process for planning, creating, testing, deploying, and maintaining software applications.",
+                context: "SecurityX emphasizes a Secure SDLC (SSDLC) where threat modeling, code auditing, and security gates are integrated into every phase.",
+                hook: "The architectural master plan guiding a construction project from design sketch to demolition."
+            },
+            {
+                acronym: "SOA",
+                expansion: "Service-oriented Architecture",
+                domain: "Domain 2.0",
+                concept: "An architectural style where software components provide services to other components via communication protocols over a network.",
+                context: "Requires strong message-level encryption, API gateway authentication, and enterprise service bus (ESB) security controls.",
+                hook: "A business office where specialized departments offer specific services to each other via internal memo requests."
+            },
+            {
+                acronym: "VPC",
+                expansion: "Virtual Private Cloud",
+                domain: "Domain 2.0",
+                concept: "An isolated private network section provisioned within a public cloud environment.",
+                context: "Allows security architects to implement network segmentation, subnets, route tables, and security groups inside public cloud providers.",
+                hook: "A gated, walled residential estate located inside a massive public park."
+            }
+        ];
+
+        // PLACEHOLDERS FOR REMAINING BATCHES (Paste incoming arrays here)
+        // BATCH 2: AI, Threat Intelligence & Frameworks
+const batch2Data = [
+    {
+        acronym: "AI",
+        expansion: "Artificial Intelligence",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Software systems capable of performing tasks requiring human cognition, such as learning, pattern recognition, and decision-making.",
+        context: "SecurityX focuses on securing AI models against adversarial threats (data poisoning, model inversion) and leveraging AI in SOC automation.",
+        hook: "Teaching machines to think like humans while preventing threat actors from tricking their brain."
+    },
+    {
+        acronym: "ATLAS",
+        expansion: "Adversarial Threat Landscape for Artificial Intelligence Systems",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A MITRE knowledge base mapping real-world adversary tactics, techniques, and procedures (TTPs) targeting AI/ML systems.",
+        context: "Used to threat-model AI pipelines, assess security posturing of LLMs/ML models, and defend against ML-specific attack vectors.",
+        hook: "MITRE ATT&CK tailored specifically for artificial intelligence and machine learning threats."
+    },
+    {
+        acronym: "ATT&CK",
+        expansion: "Adversarial Tactics, Techniques, and Common Knowledge",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A globally accessible knowledge base of real-world adversary tactics and techniques based on empirical operational observations.",
+        context: "Essential for SOC threat hunting, mapping detection coverage (EDR/SIEM rules), and emulating adversary behaviors in purple team drills.",
+        hook: "The master encyclopedia of every tactical move an enterprise hacker can make."
+    },
+    {
+        acronym: "CAPEC",
+        expansion: "Common Attack Pattern Enumeration and Classification",
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A comprehensive dictionary and classification of known attack patterns leveraged by adversaries to exploit system weaknesses.",
+        context: "Helps application security architects understand attacker mechanisms to design resilient software controls during SDLC threat modeling.",
+        hook: "The playbook detailing the exact steps an attacker takes to exploit a system."
+    },
+    {
+        acronym: "CPE",
+        expansion: "Common Platform Enumeration",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A standardized structured naming scheme for operating systems, hardware platforms, and software applications.",
+        context: "Used by vulnerability scanners (SCAP) to uniquely identify software assets before matching them against CVE databases.",
+        hook: "A universal barcode specifically assigned to software and OS versions."
+    },
+    {
+        acronym: "CTI",
+        expansion: "Cyber Threat Intelligence",
+        domain: "Domain 4.0: Security Operations",
+        concept: "Evidence-based knowledge regarding threat actor motivations, targets, infrastructure, and operational methods.",
+        context: "Ingested via STIX/TAXII into TIPs and SIEMs to proactively block threat actor infrastructure and correlate malicious telemetry.",
+        hook: "Detailed police intelligence files on active criminal gangs operating in your area."
+    },
+    {
+        acronym: "CVE",
+        expansion: "Common Vulnerabilities and Exposures",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A dictionary of publicly disclosed cybersecurity vulnerabilities, each assigned a unique standardized identifier (e.g., CVE-2024-1234).",
+        context: "Provides a common language for security teams, vendors, and tools to track, prioritize, and patch software flaws across the enterprise.",
+        hook: "The unique identification number assigned to a specific software bug."
+    },
+    {
+        acronym: "CVSS",
+        expansion: "Common Vulnerability Scoring System",
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An open framework for communicating the characteristics and severity of software vulnerabilities on a 0.0 to 10.0 numerical scale.",
+        context: "Used in enterprise risk management to prioritize patching based on Base (exploitability/impact), Temporal, and Environmental metrics.",
+        hook: "The measurement scale quantifying how destructive a software vulnerability is."
+    },
+    {
+        acronym: "D3FEND",
+        expansion: "Detection, Denial, and Disruption Framework Empowering Network Defense",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A MITRE framework mapping defensive technical countermeasures and engineering controls.",
+        context: "Complements ATT&CK by providing explicit engineering countermeasures (e.g., file integrity monitoring, honeypots) to neutralize offensive TTPs.",
+        hook: "The defensive counter-blueprint matching every offensive move in ATT&CK."
+    },
+    {
+        acronym: "IoC",
+        expansion: "Indicator of Compromise",
+        domain: "Domain 4.0: Security Operations",
+        concept: "Artifacts or residual data observed on a network or OS indicating a computer security incident or breach has occurred.",
+        context: "Extracted from CTI feeds (IPs, file hashes, domain names) and fed to EDR/SIEM to detect active or past enterprise breaches.",
+        hook: "Fingerprints and broken glass left behind at a crime scene."
+    },
+    {
+        acronym: "LLM",
+        expansion: "Large Language Model",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Advanced AI algorithms trained on massive text datasets capable of processing and generating human-like natural language.",
+        context: "Security architects must implement guardrails against OWASP LLM Top 10 risks (prompt injection, model poisoning, supply chain risk).",
+        hook: "A supercharged, context-aware reasoning engine operating on human text."
+    },
+    {
+        acronym: "MCP",
+        expansion: "Model Context Protocol",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An open protocol enabling AI models to securely connect and exchange context with external data repositories and tools.",
+        context: "Requires strict API isolation, access boundaries, and output sanitization to prevent unauthorized data exfiltration via AI interfaces.",
+        hook: "The secure interface cable linking AI models directly to corporate database vaults."
+    },
+    {
+        acronym: "OSINT",
+        expansion: "Open-source Intelligence",
+        domain: "Domain 4.0: Security Operations",
+        concept: "Intelligence gathered from publicly accessible sources, such as public websites, social media, WHOIS records, and public filings.",
+        context: "Used by attackers for reconnaissance and by enterprise defenders to identify leaked credentials, exposed assets, and footprint risk.",
+        hook: "Gathering clues by reading public newspapers, online registers, and social media posts."
+    },
+    {
+        acronym: "OVAL",
+        expansion: "Open Vulnerability and Assessment Language",
+        domain: "Domain 4.0: Security Operations",
+        concept: "An open XML standard for expressing machine state, configuration, and vulnerability testing procedures.",
+        context: "Powers automated vulnerability scanners within the SCAP framework to evaluate local system compliance and software status.",
+        hook: "The standardized medical checklist used during an automated host physical exam."
+    },
+    {
+        acronym: "OWASP",
+        expansion: "Open Worldwide Application Security Project",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An open community producing non-profit, practical resources and standards for web and application security.",
+        context: "Known for the OWASP Top 10, API Security Top 10, and SAMM, guiding enterprise application security testing and developer training.",
+        hook: "The globally trusted community watchdog publishing web security best practices."
+    },
+    {
+        acronym: "SCAP",
+        expansion: "Security Content Automation Protocol",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A suite of interoperable standards (CVE, CPE, CVSS, OVAL, XCCDF) used to automate vulnerability management and compliance auditing.",
+        context: "Enables automated asset management, configuration checking, and vulnerability scanning across enterprise endpoint fleets.",
+        hook: "The master orchestrator bringing multiple vulnerability standardization languages together."
+    },
+    {
+        acronym: "STIX",
+        expansion: "Structured Threat Information eXchange",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A standardized, structured language (JSON) used to describe cyber threat intelligence information in a machine-readable format.",
+        context: "Standardizes threat actor data, campaign details, and IoCs so different security vendors and platforms can share intelligence seamlessly.",
+        hook: "The universal grammar and sentence structure used to write threat intelligence reports."
+    },
+    {
+        acronym: "STRIDE",
+        expansion: "Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation of Privilege",
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A threat modeling framework classifying threats into six core categories based on security property violations.",
+        context: "Used during early SDLC design to identify threat categories and systematically select matching countermeasures.",
+        hook: "The six distinct categories of attacks that can breach your architectural blueprint."
+    },
+    {
+        acronym: "TAXII",
+        expansion: "Trusted Automated Exchange of Indicator Information",
+        domain: "Domain 4.0: Security Operations",
+        concept: "An application-layer protocol (RESTful API over HTTPS) for transmitting STIX-formatted threat intelligence.",
+        context: "The transport mechanism used to automate threat intelligence feed ingestion directly into SIEMs, TIPs, and firewalls.",
+        hook: "The armored mail truck delivering the standardized STIX threat letters."
+    },
+    {
+        acronym: "TIP",
+        expansion: "Threat Intelligence Platform",
+        domain: "Domain 4.0: Security Operations",
+        concept: "An enterprise application that aggregates, cleanses, correlates, and enriches CTI feeds from multiple external and internal sources.",
+        context: "Integrates with SIEM/SOAR to automate threat blocking, deduplicate IoCs, and enrich incident investigations.",
+        hook: "The central clearinghouse sorting and deduplicating intelligence reports from multiple agencies."
+    },
+    {
+        acronym: "TTPs",
+        expansion: "Tactics, Techniques, and Procedures",
+        domain: "Domain 4.0: Security Operations",
+        concept: "The behavior, methods, and operational patterns used by specific threat actors during a cyberattack.",
+        context: "Positioned at the apex of the Pyramid of Pain; detecting and disrupting adversary TTPs forces attackers to re-engineer their strategy.",
+        hook: "The unique habits, signature moves, and operational style of a high-profile criminal gang."
+    },
+    {
+        acronym: "XCCDF",
+        expansion: "Extensible Configuration Checklist Description Format",
+        domain: "Domain 4.0: Security Operations",
+        concept: "An XML format for specifying security benchmarks, hardening checklists, and compliance testing rules.",
+        context: "Used by automated SCAP compliance tools (like OpenSCAP) to assess system configurations against benchmark guidelines.",
+        hook: "The digital, machine-readable checklist for auditing server security settings."
+    }
+];
+        // BATCH 3: Cryptography, PKI & Secure Communications
+        const batch3Data = [
+            {
+                acronym: "2FA",
+                expansion: "Two-factor Authentication",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An identity verification method requiring two distinct authentication factors before granting system access.",
+                context: "SecurityX tests evaluating multi-factor combinations (something you know, have, are) vs weak dual-factor implementations like SMS OTP.",
+                hook: "A security door requiring both a physical keycard and a secret PIN code to unlock."
+            },
+            {
+                acronym: "ACME",
+                expansion: "Automated Certificate Management Environment",
+                domain: "Domain 2.0: Security Architecture",
+                concept: "A communications protocol for automating domain validation and digital certificate issuance and renewal.",
+                context: "Essential for enterprise PKI management at scale, eliminating system outages caused by unexpectedly expired TLS certificates.",
+                hook: "An automated conveyor belt renewing your security badges before they expire."
+            },
+            {
+                acronym: "AEAD",
+                expansion: "Authenticated Encryption with Associated Data",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A cryptographic mode providing confidentiality, data integrity, and authenticity in a single operation.",
+                context: "Prevents ciphertext tampering (e.g., bit-flipping attacks) in high-security protocols like TLS 1.3 and IPSec.",
+                hook: "Sealing a letter in an envelope while stamping an unalterable wax seal on the outside."
+            },
+            {
+                acronym: "AES",
+                expansion: "Advanced Encryption Standard",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A symmetric block cipher utilizing key lengths of 128, 192, or 256 bits for data protection.",
+                context: "The enterprise standard algorithm for bulk data-at-rest (FDE, databases) and data-in-transit encryption across enterprise systems.",
+                hook: "The standard enterprise workhorse lockbox using a single shared master key."
+            },
+            {
+                acronym: "AES-GCM",
+                expansion: "Advanced Encryption Standard in Galois/Counter Mode",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An AEAD mode of AES providing high-speed authenticated encryption with parallel processing support.",
+                context: "Used in modern TLS 1.3, IPSec, and SSH for high-throughput, tamper-proof network traffic encryption.",
+                hook: "A supercharged assembly line encrypting and integrity-checking packages in parallel."
+            },
+            {
+                acronym: "CA",
+                expansion: "Certificate Authority",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A trusted entity that issues, signs, and manages digital identity certificates within a PKI trust hierarchy.",
+                context: "The root of trust for enterprise identity; CA compromise invalidates the entire certificate infrastructure.",
+                hook: "The government passport office verifying your identity and issuing your official passport."
+            },
+            {
+                acronym: "CA/RA",
+                expansion: "Certificate Authority/Registration Authority",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "The CA issues digital certificates, while the RA verifies identity applications before sending them to the CA.",
+                context: "Architectural separation of duties that isolates identity vetting (RA) from private key signing infrastructure (CA).",
+                hook: "The DMV clerk inspecting your ID documents before the state DMV prints your driver's license."
+            },
+            {
+                acronym: "CBC",
+                expansion: "Cipher Block Chaining",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A symmetric block cipher mode where each plaintext block is XORed with the previous ciphertext block.",
+                context: "Legacy cipher mode vulnerable to padding oracle attacks (e.g., POODLE); being phased out in favor of AEAD modes like GCM.",
+                hook: "A chain-link fence where every link is welded directly to the previous link."
+            },
+            {
+                acronym: "CRL",
+                expansion: "Certificate Revocation List",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A list of revoked digital certificate serial numbers published periodically by a Certificate Authority.",
+                context: "Bandwidth-heavy legacy revocation check; risks stale status compared to real-time status mechanisms like OCSP.",
+                hook: "A printed bulletin board listing revoked driver's license numbers."
+            },
+            {
+                acronym: "CSR",
+                expansion: "Certificate Signing Request",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An encoded message sent to a CA to request a signed digital certificate, containing the applicant's public key.",
+                context: "Private keys are generated locally and NEVER sent in a CSR; only the public key and identity data leave the endpoint.",
+                hook: "Submitting an application form along with a sample stamp mark, but keeping your physical stamp."
+            },
+            {
+                acronym: "DHE",
+                expansion: "Diffie-Hellman Ephemeral",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A key agreement protocol that generates dynamic, temporary keys for every individual session.",
+                context: "Provides Perfect Forward Secrecy (PFS); compromising a server's long-term private key cannot decrypt past session traffic.",
+                hook: "Burning a burner phone after every single conversation so past calls can never be wiretapped."
+            },
+            {
+                acronym: "DKIM",
+                expansion: "Domain Keys Identified Mail",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An email authentication protocol that adds a cryptographic signature to outgoing email headers.",
+                context: "Proves that email messages were authorized by the domain owner and were not modified in transit.",
+                hook: "Stamping a tamper-evident cryptographic wax seal on every outgoing corporate memo."
+            },
+            {
+                acronym: "DMARC",
+                expansion: "Domain-based Message Authentication Reporting and Conformance",
+                domain: "Domain 1.0: Governance, Risk, and Compliance",
+                concept: "An email policy framework using SPF and DKIM to instruct receiving servers how to handle failed authentication.",
+                context: "Enables domain owners to enforce strict reject policies against phishing and receive aggregate spoofing analytics reports.",
+                hook: "The policy rulebook telling mailrooms to incinerate fake mail claiming to be from headquarters."
+            },
+            {
+                acronym: "DSA",
+                expansion: "Digital Signature Algorithm",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A legacy Federal standard algorithm for generating asymmetric digital signatures.",
+                context: "Slower and less efficient than modern ECC algorithms; deprecated in modern enterprise security architectures.",
+                hook: "A slow hand-written notarization stamp being replaced by fast digital signets."
+            },
+            {
+                acronym: "ECB",
+                expansion: "Electronic Code Book",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "The simplest symmetric block cipher mode where identical plaintext blocks produce identical ciphertext blocks.",
+                context: "Insecure cipher mode that preserves data patterns (e.g., leaking image outlines); strictly prohibited in enterprise architecture.",
+                hook: "Stamping identical rubber stamps over a picture—the outline of the picture still shines through."
+            },
+            {
+                acronym: "ECC",
+                expansion: "Elliptic Curve Cryptography",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "Asymmetric cryptography utilizing the algebraic structure of elliptic curves over finite fields.",
+                context: "Delivers equivalent security to RSA with drastically smaller key sizes (e.g., 256-bit ECC ≈ 3072-bit RSA), saving bandwidth.",
+                hook: "A micro deadbolt lock providing the exact same strength as a massive iron vault door."
+            },
+            {
+                acronym: "ECDH",
+                expansion: "Elliptic Curve Diffie-Hellman",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A key agreement protocol allowing two parties to establish a shared secret using elliptic curve key pairs.",
+                context: "Enables secure symmetric key exchange over untrusted channels with minimal computational overhead.",
+                hook: "Two people mixing secret paint colors using light formulas to produce a matching shared color key."
+            },
+            {
+                acronym: "ECDHE",
+                expansion: "Elliptic Curve Diffie-Hellman Ephemeral",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An ECDH key exchange using temporary, disposable key pairs for every single session.",
+                context: "The gold standard key exchange combining low computational overhead (ECC) with Perfect Forward Secrecy (PFS).",
+                hook: "Mixing secret colors using temporary disposable pigments discarded after every single connection."
+            },
+            {
+                acronym: "GCM",
+                expansion: "Galois/Counter Mode",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A block cipher mode providing high-speed authenticated encryption and data integrity verification.",
+                context: "Essential for modern high-bandwidth security protocols where encryption and integrity must be verified simultaneously.",
+                hook: "An assembly line that encrypts data packages while stamping a tamper check tag."
+            },
+            {
+                acronym: "HSM",
+                expansion: "Hardware Security Module",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A tamper-resistant physical hardware appliance dedicated to generating, storing, and managing cryptographic keys.",
+                context: "Protects root CA keys, payment gateways, and master encryption keys from extraction even if the host OS is compromised.",
+                hook: "A bomb-proof physical safe that uses keys inside its walls without ever letting them leave."
+            },
+            {
+                acronym: "HSTS",
+                expansion: "HTTP Strict Transport Security",
+                domain: "Domain 2.0: Security Architecture",
+                concept: "A web server response header that forces web browsers to interact exclusively over HTTPS connections.",
+                context: "Mitigates SSL stripping attacks, rogue redirects, and session cookie hijacking on corporate web assets.",
+                hook: "A building door that automatically locks shut if anyone tries to enter without a badge."
+            },
+            {
+                acronym: "IKE",
+                expansion: "Internet Key Exchange",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An IPsec protocol responsible for authenticating peers, negotiating Security Associations (SAs), and establishing keys.",
+                context: "Drives Phase 1 and Phase 2 setup in site-to-site and remote access IPsec VPN tunnels (IKEv2).",
+                hook: "The pre-flight radio negotiation between two pilots establishing a secure channel before flying."
+            },
+            {
+                acronym: "IPSec",
+                expansion: "Internet Protocol Security",
+                domain: "Domain 2.0: Security Architecture",
+                concept: "A protocol suite enforcing encryption, authentication, and data integrity at the IP layer (Layer 3).",
+                context: "Used for establishing site-to-site VPN tunnels and securing host-to-host communications across untrusted networks.",
+                hook: "Constructing an armored underground pipeline for all raw network packets moving between offices."
+            },
+            {
+                acronym: "OCSP",
+                expansion: "Online Certificate Status Protocol",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An automated real-time query protocol for checking certificate revocation status directly with an online responder.",
+                context: "Replaces large CRL downloads with lightweight 'good', 'revoked', or 'unknown' status responses.",
+                hook: "Calling the security office in real time to ask if a specific visitor pass is still valid."
+            },
+            {
+                acronym: "PKI",
+                expansion: "Public Key Infrastructure",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "The framework of hardware, software, roles, and policies managing digital certificates and asymmetric encryption.",
+                context: "Foundational trust architecture enabling web browsing (HTTPS), digital signatures, code signing, and device identity.",
+                hook: "The complete legal ecosystem issuing, auditing, and enforcing digital passports."
+            },
+            {
+                acronym: "PQC",
+                expansion: "Post-Quantum Cryptography",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "Asymmetric algorithms engineered to withstand attacks executed by future quantum computing capabilities.",
+                context: "Defends against 'Harvest Now, Decrypt Later' threat actor tactics targeting current RSA/ECC public key infrastructure.",
+                hook: "Installing quantum-proof lock cylinders today before super-powered plasma cutters are invented."
+            },
+            {
+                acronym: "PSK",
+                expansion: "Pre-shared Key",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A shared secret key distributed to participating endpoints prior to establishing a secure connection.",
+                context: "Common in Wi-Fi (WPA2/WPA3-Personal) and simple VPNs; scales poorly in enterprise environments due to shared key risk.",
+                hook: "A shared secret password written on a paper slip handed out to staff prior to a mission."
+            },
+            {
+                acronym: "RSA",
+                expansion: "Rivest-Shamir-Adleman",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A widely adopted asymmetric encryption algorithm based on the mathematical difficulty of factoring large prime numbers.",
+                context: "Used for key exchange, digital signatures, and encryption; requires 3072+ bit key lengths to maintain enterprise security.",
+                hook: "The classic heavy mathematical padlock requiring massive key sizes to remain unbroken."
+            },
+            {
+                acronym: "SCEP",
+                expansion: "Simple Certificate Enrollment Protocol",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A protocol enabling network equipment and mobile devices to automatically request and receive digital certificates.",
+                context: "Crucial for automated MDM/BYOD mobile device onboarding and network device certificate auto-enrollment.",
+                hook: "An automated drive-thru window issuing enterprise ID badges to company mobile devices."
+            },
+            {
+                acronym: "SCHANNEL",
+                expansion: "Secure Channel",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A Microsoft Windows Security Support Provider (SSP) implementing SSL, TLS, and PCT authentication protocols.",
+                context: "The native Windows OS cryptographic package underlying HTTPS, LDAP over TLS, and S/MIME communications.",
+                hook: "The native Windows security engine driving all background encrypted communications."
+            },
+            {
+                acronym: "SHA-256",
+                expansion: "Secure Hash Algorithm 256",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A cryptographic hash function producing a fixed 256-bit digest value from input data of any size.",
+                context: "Guarantees data integrity; used extensively in digital signatures, certificate fingerprints, and file integrity monitoring.",
+                hook: "Generating an unalterable 256-bit digital fingerprint from any file or document."
+            },
+            {
+                acronym: "S/MIME",
+                expansion: "Secure/Multipurpose Internet Mail Extensions",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A protocol for public-key encryption and digital signing of MIME-formatted email content.",
+                context: "Guarantees end-to-end email confidentiality, sender non-repudiation, and message integrity across mail servers.",
+                hook: "Sealing an email in an encrypted, tamper-proof envelope stamped with your digital wax seal."
+            },
+            {
+                acronym: "SPF",
+                expansion: "Sender Policy Framework",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An email authentication protocol listing authorized sending mail server IP addresses in DNS TXT records.",
+                context: "Allows receiving mail servers to verify if incoming messages originated from an authorized enterprise IP address.",
+                hook: "A public guest list at the gate detailing exactly which delivery trucks are authorized to drop off mail."
+            },
+            {
+                acronym: "SSH",
+                expansion: "Secure Shell",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A cryptographic network protocol (Port 22) for secure remote command-line administration and file transfer.",
+                context: "Replaces unencrypted Telnet/rsh; uses asymmetric key authentication to secure administrative terminal sessions.",
+                hook: "An encrypted tunnel giving sysadmins secure access to remote server command prompts."
+            },
+            {
+                acronym: "SSL",
+                expansion: "Secure Sockets Layer",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A deprecated cryptographic protocol originally designed to secure HTTP web communications.",
+                context: "Fully superseded by TLS due to severe vulnerabilities (POODLE, BEAST); legacy SSL must be disabled across enterprises.",
+                hook: "The retired predecessor lock system that has been decommissioned due to known vulnerabilities."
+            },
+            {
+                acronym: "TLS",
+                expansion: "Transport Layer Security",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "The modern cryptographic protocol delivering privacy, data integrity, and authentication over computer networks.",
+                context: "The standard foundation for HTTPS, FTPS, and secure APIs; SecurityX focuses on enforcing TLS 1.3 configurations.",
+                hook: "The modern universal encryption shield guarding web traffic moving across the internet."
+            },
+            {
+                acronym: "TPM",
+                expansion: "Trusted Platform Module",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "A dedicated hardware crypto-processor chip embedded on a motherboard to secure hardware assets.",
+                context: "Provides hardware-rooted Measured Boot, remote attestation, and secure key storage for Full Disk Encryption (e.g., BitLocker).",
+                hook: "An immovable security vault welded directly onto the computer motherboard."
+            },
+            {
+                acronym: "TTLS",
+                expansion: "Tunneled Transport Layer Security",
+                domain: "Domain 3.0: Security Engineering",
+                concept: "An EAP authentication protocol that encapsulates client authentication inside an encrypted TLS tunnel.",
+                context: "Allows secure legacy credential authentication inside an encrypted outer TLS tunnel without requiring client certs.",
+                hook: "Passing an unencrypted identity badge inside a bulletproof transparent tube."
+            },
+            {
+                acronym: "vTPM",
+                expansion: "Virtual Trusted Platform Module",
+                domain: "Domain 2.0: Security Architecture",
+                concept: "A software-emulated representation of a physical TPM provisioned for virtual machines.",
+                context: "Enables hypervisor-hosted VMs to execute measured boot, full-disk encryption, and key isolation independently of host hardware.",
+                hook: "A software-defined security safe assigned to individual virtual machines inside a host server."
+            }
+        ];
+        // BATCH 4: Identity, Access & Zero Trust Controls
+const batch4Data = [
+    {
+        acronym: "ABAC",
+        expansion: "Attribute-based Access Control",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An access control framework evaluating policies based on user, resource, and environmental attributes (e.g., location, time, risk score).",
+        context: "The core engine behind Zero Trust dynamic access control, allowing fine-grained access decisions beyond static roles.",
+        hook: "A smart bouncer checking your identity, your clothing, the current weather, and time of night before granting entry."
+    },
+    {
+        acronym: "ACL",
+        expansion: "Access Control List",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A rule table defining permissions attached to an object, file, or network interface specifying authorized subjects.",
+        context: "Found on firewalls (stateless packet filtering) and file systems; evaluated sequentially from top to bottom with an implicit deny at the end.",
+        hook: "The VIP guest list held by security at the entrance of a building."
+    },
+    {
+        acronym: "ACS",
+        expansion: "Assertion Consumer Service",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A Service Provider (SP) endpoint that receives and parses SAML authentication assertions sent by an Identity Provider (IdP).",
+        context: "Crucial for SAML 2.0 Single Sign-On (SSO) flows; misconfigurations can lead to SAML assertion spoofing and identity takeover.",
+        hook: "The reception desk taking and verifying stamped entry vouchers issued by headquarters."
+    },
+    {
+        acronym: "BYOD",
+        expansion: "Bring Your Own Device",
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An enterprise policy permitting employees to use personal mobile devices for corporate work purposes.",
+        context: "Requires containerization (MDM/MAM), remote wipe capabilities, and network isolation to protect enterprise data on untrusted hardware.",
+        hook: "Bringing your personal car to work and placing corporate delivery logos on the side doors."
+    },
+    {
+        acronym: "CAPTCHA",
+        expansion: "Completely Automated Public Turing test to tell Computers and Humans Apart",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A challenge-response test used in computing to determine whether the user is human or an automated bot.",
+        context: "Defends against credential stuffing, brute-force login attacks, and automated web scraping at application perimeters.",
+        hook: "A puzzle at the door that only a human brain can solve."
+    },
+    {
+        acronym: "DAC",
+        expansion: "Discretionary Access Control",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An access control model where the data owner has full discretion to grant or revoke access permissions to others.",
+        context: "Used in standard NTFS/Linux file systems; vulnerable to permission creep and Trojan horses because users can re-share data.",
+        hook: "Giving a house key to your neighbor and allowing them to make copies for their friends."
+    },
+    {
+        acronym: "EAP",
+        expansion: "Extensible Authentication Protocol",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An authentication framework frequently used in wireless networks and point-to-point connections.",
+        context: "Acts as a transport envelope for specific authentication mechanisms (EAP-TLS, PEAP, EAP-FAST) in 802.1X network access control.",
+        hook: "A flexible postal container engineered to carry many different types of secure mail."
+    },
+    {
+        acronym: "FAST",
+        expansion: "Flexible Authentication via Secure Tunneling",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Cisco's EAP protocol establishing a TLS tunnel using Protected Access Credentials (PAC) without requiring server certificates.",
+        context: "Used for 802.1X wireless authentication in environments where PKI certificate deployment is impractical.",
+        hook: "Creating a secure private tunnel using a pre-issued secret token instead of an official certificate."
+    },
+    {
+        acronym: "FIDO",
+        expansion: "Fast Identity Online",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An open industry standard for passwordless, phishing-resistant authentication using public-key cryptography.",
+        context: "FIDO2 / WebAuthn forms the architectural basis for modern passkeys and physical security keys (e.g., YubiKeys).",
+        hook: "Unlocking your bank account using your physical security key and fingerprint instead of a password."
+    },
+    {
+        acronym: "GPO",
+        expansion: "Group Policy Objects",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A feature of Microsoft Active Directory that controls working environments of user and computer accounts.",
+        context: "Enforces centralized OS hardening, password policies, software installation restrictions, and security baselines across domain endpoints.",
+        hook: "The central corporate rulebook enforcing uniform computer policies across all workstations."
+    },
+    {
+        acronym: "IAM",
+        expansion: "Identity and Access Management",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "The business framework of policies and technologies ensuring proper entities have appropriate access to enterprise assets.",
+        context: "Encompasses identity provisioning, governance, authentication, authorization, and lifecycle management across hybrid environments.",
+        hook: "The central HR and security department issuing and auditing employee badges."
+    },
+    {
+        acronym: "IdP",
+        expansion: "Identity Provider",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A system entity that creates, maintains, and manages identity information while providing authentication services to applications.",
+        context: "The central source of truth (e.g., Okta, Entra ID) emitting authentication tokens (SAML, OIDC) to federated Service Providers.",
+        hook: "The central passport office verifying identity and issuing official entry visas."
+    },
+    {
+        acronym: "KRBTGT",
+        expansion: "Kerberos Ticket-Granting Ticket Account",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A local default account in Active Directory acting as the service account for the Kerberos Key Distribution Center (KDC).",
+        context: "Compromise of the KRBTGT account password allows attackers to forge Golden Tickets and achieve total Domain Admin persistence.",
+        hook: "The master stamp used to print valid, unforgeable entrance tickets for an entire amusement park."
+    },
+    {
+        acronym: "LAPS",
+        expansion: "Local Administrator Password Solution",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A Microsoft tool that automatically rotates and randomizes local administrator account passwords on domain-joined endpoints.",
+        context: "Mitigates lateral movement attack vectors (e.g., Pass-the-Hash) by preventing uniform local admin passwords across workstations.",
+        hook: "Automatically changing the lock combination on every office door so no two offices share the same key."
+    },
+    {
+        acronym: "LDAP",
+        expansion: "Lightweight Directory Access Protocol",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An open vendor-neutral protocol used to query and manage directory services over IP networks.",
+        context: "Must be secured with TLS (LDAPS, Port 636) to prevent plaintext credential sniffing during directory queries.",
+        hook: "The digital phonebook directory used by applications to look up employee accounts."
+    },
+    {
+        acronym: "MAC",
+        expansion: "Mandatory Access Control",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A non-discretionary access control model where access rights are regulated by central authority based on security clearances.",
+        context: "Enforces multi-level security (e.g., Top Secret vs Secret in SELinux); end users cannot alter or share data permissions.",
+        hook: "A high-security military vault where strict security clearances override owner preferences."
+    },
+    {
+        acronym: "MDM",
+        expansion: "Mobile Device Management",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Software allowing IT administrators to control, secure, and enforce security policies on mobile endpoints.",
+        context: "Enforces device encryption, remote wipe capabilities, passcode policies, and app white-listing across corporate and BYOD fleets.",
+        hook: "A remote control device allowing IT to enforce rules and lock down smartphones from a distance."
+    },
+    {
+        acronym: "MFA",
+        expansion: "Multifactor Authentication",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An authentication mechanism requiring two or more independent credential categories (knowledge, possession, inherence).",
+        context: "A foundational Zero Trust requirement; modern architectures require phishing-resistant MFA (FIDO2/WebAuthn) to prevent SMS/push fatigue.",
+        hook: "Unlocking a vault using a keycard, a fingerprint, and a secret passphrase simultaneously."
+    },
+    {
+        acronym: "MS-CHAP",
+        expansion: "Microsoft Challenge Handshake Authentication Protocol",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Microsoft's legacy authentication protocol used for PPP network connections and VPNs.",
+        context: "Severely vulnerable to MS-CHAPv2 cracking attacks; deprecated in modern enterprise security in favor of EAP-TLS.",
+        hook: "An old secret handshake protocol that has been broken and easily eavesdropped."
+    },
+    {
+        acronym: "NAC",
+        expansion: "Network Access Control",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An architectural solution enforcing security posture compliance before allowing endpoints to join a network.",
+        context: "Audits endpoint health (antivirus status, patch level) via 802.1X; quarantines non-compliant systems to isolated VLANs.",
+        hook: "The border guard inspecting a vehicle's mechanical health before letting it onto the highway."
+    },
+    {
+        acronym: "NTLM",
+        expansion: "New Technology LAN Manager",
+        domain: "Domain 4.0: Security Operations",
+        concept: "A suite of legacy Microsoft authentication protocols using challenge-response algorithms.",
+        context: "Highly vulnerable to NTLM relay and credential cracking attacks; replaced by Kerberos in modern Active Directory architectures.",
+        hook: "An obsolete authentication stamp easily copied and passed along by malicious third parties."
+    },
+    {
+        acronym: "OAuth",
+        expansion: "Open Authorization",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An open standard framework for authorization, allowing applications to access user resources without exposing credentials.",
+        context: "Uses scoped Access Tokens (OAuth 2.0) to grant third-party applications limited, delegated API permissions.",
+        hook: "Handing a hotel valet key to a driver that lets them start the car, but keeps the glovebox locked."
+    },
+    {
+        acronym: "OIDC",
+        expansion: "OpenID Connect",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An identity layer built directly on top of the OAuth 2.0 framework to perform user authentication.",
+        context: "Combines OAuth 2.0 delegated authorization with JSON Web Tokens (ID Tokens) to deliver modern RESTful Single Sign-On.",
+        hook: "A standardized digital driver's license handed out on top of a valet parking key."
+    },
+    {
+        acronym: "OTP",
+        expansion: "One-time Password",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A password that is valid for only one login session or transaction on a computer system or digital device.",
+        context: "Serves as an authentication factor; delivered via hardware tokens, push notifications, or authenticator apps.",
+        hook: "A single-use paper ticket that self-destructs immediately after you pass through the turnstile."
+    },
+    {
+        acronym: "PAM",
+        expansion: "Privileged Access Management",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A domain of cybersecurity focused on safeguarding, controlling, and auditing elevated (admin) account credentials.",
+        context: "Features credential vaulting, Just-in-Time (JIT) access elevation, command logging, and session recording for root/admin access.",
+        hook: "A master key vault that logs every time an admin checks out a master key and records their actions."
+    },
+    {
+        acronym: "PEAP",
+        expansion: "Protected Extensible Authentication Protocol",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A protocol encapsulating EAP inside an encrypted TLS tunnel to secure wireless authentication.",
+        context: "Requires a server-side certificate only; protects user credentials (MS-CHAPv2) from wireless eavesdropping.",
+        hook: "Encapsulating a vulnerable credential letter inside a secure, encrypted outer envelope."
+    },
+    {
+        acronym: "RADIUS",
+        expansion: "Remote Authentication Dial-in User Service",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A networking protocol providing centralized Authentication, Authorization, and Accounting (AAA) management.",
+        context: "Combines authentication and authorization over UDP (Ports 1812/1813); encrypts only the password field, leaving headers unencrypted.",
+        hook: "The central switchboard operator verifying user login credentials for remote network access."
+    },
+    {
+        acronym: "SAE",
+        expansion: "Simultaneous Authentication of Equals",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A secure password-based key exchange method used in WPA3 wireless networks (Dragonfly Key Exchange).",
+        context: "Replaces vulnerable WPA2 Pre-shared Keys; prevents offline dictionary attacks and enforces forward secrecy on Wi-Fi.",
+        hook: "Two parties proving they know a shared passphrase without ever revealing it across the airwaves."
+    },
+    {
+        acronym: "SAML",
+        expansion: "Security Assertions Markup Language",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An XML-based open standard for exchanging authentication and authorization data between an IdP and a Service Provider.",
+        context: "The enterprise standard for browser-based Single Sign-On (SSO) across enterprise web applications.",
+        hook: "An officially stamped, XML-encoded digital passport presented at web application entry gates."
+    },
+    {
+        acronym: "SSO",
+        expansion: "Single Sign-on",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An authentication scheme allowing a user to log in with one set of credentials to access multiple applications.",
+        context: "Reduces password fatigue and attack surface; requires strong MFA and centralized monitoring at the Identity Provider level.",
+        hook: "A single master keycard granting access to every office building on a corporate campus."
+    },
+    {
+        acronym: "TACACS+",
+        expansion: "Terminal Access Controller Access-control System",
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A Cisco-proprietary AAA protocol that encrypts the entire packet payload over TCP (Port 49).",
+        context: "Separates AAA functions; preferred over RADIUS for administrative access to network routers and switches due to granular command controls.",
+        hook: "An armored, fully encrypted communications link designed specifically for administrative network management."
+    },
+    {
+        acronym: "TOTP",
+        expansion: "Time-based One-time Password",
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An algorithm that computes a one-time password from a shared secret key and the current timestamp.",
+        context: "Standardized in RFC 6238; generates 6-digit codes on authenticator apps without requiring cellular connectivity.",
+        hook: "A secret key code generator that synchronizes with the official clock to output a new PIN every 30 seconds."
+    }
+];
+        // BATCH 5: Enterprise GRC, Privacy & Risk Frameworks
+const batch5Data = [
+    {
+        acronym: "BCP",
+        expansion: "Business Continuity Planning", //[cite: 1]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "The overarching tactical blueprint ensuring essential enterprise business operations continue functioning during and after a disaster.",
+        context: "Focuses on maintaining business availability and operational stability beyond immediate IT disaster recovery execution.",
+        hook: "The organizational playbook keeping the business open even if the main headquarters burns down."
+    },
+    {
+        acronym: "BIA",
+        expansion: "Business Impact Analysis", //[cite: 1]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A systematic process evaluating the financial, operational, and legal consequences of a business disruptor.",
+        context: "Identifies mission-critical functions and establishes key metrics including Maximum Tolerable Downtime (MTD), RPO, and RTO.",
+        hook: "Calculating the exact hourly cost of shutting down factory production lines."
+    },
+    {
+        acronym: "CCPA",
+        expansion: "California Consumer Privacy Act", //[cite: 1]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A state-level privacy statute granting California residents control over their personal information collected by businesses.",
+        context: "Mandates 'Do Not Sell My Info' options, data access requests, and strict financial penalties for consumer data breaches.",
+        hook: "California's version of consumer privacy rules enforcing data access and opt-out rights."
+    },
+    {
+        acronym: "CIS",
+        expansion: "Center for Internet Security", //[cite: 1]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A non-profit organization publishing consensus-based cybersecurity benchmarks and critical security controls.",
+        context: "Provides gold-standard OS, container, and cloud configuration hardening guidelines widely enforced via automated compliance scanners.",
+        hook: "The standardized baseline cookbook for hardening servers and network devices."
+    },
+    {
+        acronym: "CMDB",
+        expansion: "Configuration Management Database", //[cite: 1]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A centralized repository tracking IT assets, software configuration items (CIs), and their interdependencies.",
+        context: "Essential for change management auditing, shadow asset identification, and rapid impact analysis during security incidents.",
+        hook: "The master asset register mapping how every hardware and software component connects."
+    },
+    {
+        acronym: "COBIT",
+        expansion: "Control Objectives for Information and Related Technologies", //[cite: 1]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An IT management and governance framework created by ISACA linking business goals to IT infrastructure strategy.",
+        context: "Helps enterprise executives align IT risk management, regulatory compliance, and operational controls with business objectives.",
+        hook: "The executive bridge connecting IT operations directly to corporate board decisions."
+    },
+    {
+        acronym: "COPPA",
+        expansion: "Children's Online Privacy Act", //[cite: 1]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A US federal law regulating the online collection of personal information from children under 13 years of age.",
+        context: "Requires verifiable parental consent, privacy policy disclosures, and strict data retention limits for youth-facing digital platforms.",
+        hook: "The legal shield protecting kids' personal data on websites and apps."
+    },
+    {
+        acronym: "COSO",
+        expansion: "Committee of Sponsoring Organizations of the Treadway Commission", //[cite: 1]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A joint initiative establishing enterprise risk management (ERM) and internal control evaluation frameworks.",
+        context: "Used by corporate auditors and GRC directors to assess fraud risks, financial controls, and corporate governance health.",
+        hook: "The corporate board framework for auditing internal financial and operational controls."
+    },
+    {
+        acronym: "CRM",
+        expansion: "Customer Relationship Manager", //[cite: 2]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An enterprise platform managing customer interactions, sales pipelines, and client data stores.",
+        context: "Contains high concentrations of PII/sensitive data; requires strict RBAC, data masking, and DLP controls to prevent breaches.",
+        hook: "The central corporate vault storing all customer contact details and sales histories."
+    },
+    {
+        acronym: "CSA",
+        expansion: "Cloud Security Alliance", //[cite: 2]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A non-profit organization promoting security best practices and compliance frameworks for cloud computing.",
+        context: "Publishes the Cloud Controls Matrix (CCM) and STAR registry used to audit and evaluate vendor cloud security postures.",
+        hook: "The neutral international body defining security standards for cloud environments."
+    },
+    {
+        acronym: "DMA",
+        expansion: "Digital Markets Act", //[cite: 2]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An EU regulation targeting dominant tech platforms ('gatekeepers') to foster digital market competition.",
+        context: "Impacts enterprise architecture by mandating platform interoperability, fair data access, and unbundling of core services.",
+        hook: "EU rules preventing tech giants from locking out competitors and monopolizing app stores."
+    },
+    {
+        acronym: "DORA",
+        expansion: "Digital Operational Resilience Act", //[cite: 2]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An EU regulation establishing unified digital operational resilience standards across the financial sector.",
+        context: "Forces financial entities and third-party ICT vendors to perform multi-region resilience testing and third-party risk auditing.",
+        hook: "The mandatory EU durability test ensuring financial IT systems survive cyber shocks."
+    },
+    {
+        acronym: "ERP",
+        expansion: "Enterprise Resource Planning", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A centralized software suite managing core business processes including finance, HR, manufacturing, and supply chain.",
+        context: "High-value enterprise target requiring segmented network zoning, privileged account monitoring, and strict separation of duties.",
+        hook: "The master operational brain running an entire company's back-office business operations."
+    },
+    {
+        acronym: "ETL",
+        expansion: "Extract, Transform, Load", //[cite: 2]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A three-stage data integration process pulling raw data from disparate sources, cleansing it, and loading it into a target vault.",
+        context: "Requires data sanitization, field-level encryption, and access controls to prevent toxic data combinations in data warehouses.",
+        hook: "The automated pipeline collecting, filtering, and storing business data into data lakes."
+    },
+    {
+        acronym: "GDPR",
+        expansion: "General Data Protection Regulation", //[cite: 2]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A comprehensive EU data privacy regulation enforcing strict individual privacy rights and severe non-compliance fines.",
+        context: "Mandates the Right to be Forgotten, mandatory 72-hour breach notification, Data Protection Impact Assessments (DPIAs), and cross-border transfer controls.",
+        hook: "The gold-standard European privacy law backing user data rights with massive fines."
+    },
+    {
+        acronym: "GRC",
+        expansion: "Governance, Risk, and Compliance", //[cite: 2]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An integrated strategy managing corporate IT governance, enterprise risk assessment, and regulatory adherence.",
+        context: "Aligns IT security activities directly with business goals while ensuring compliance with legal and contractual mandates.",
+        hook: "The corporate umbrella uniting executive governance, risk management, and legal compliance."
+    },
+    {
+        acronym: "ISAC",
+        expansion: "Information Sharing and Analysis Centers", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "Non-profit, industry-specific threat intelligence sharing organizations (e.g., FS-ISAC for finance, Health-ISAC for healthcare).",
+        context: "Facilitates real-time, peer-to-peer cyber threat information sharing and sector-wide breach notifications among critical infrastructure entities.",
+        hook: "The private neighborhood watch network shared between competing companies in the same industry."
+    },
+    {
+        acronym: "ISO/IEC",
+        expansion: "International Organization for Standardization/ International Electrotechnical Commission", //[cite: 3]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "International standards bodies publishing global technical and security standards (e.g., ISO/IEC 27001 for ISMS).",
+        context: "ISO/IEC 27001 certification proves an organization has implemented an audited, continuously monitored Information Security Management System.",
+        hook: "The official global standards body issuing international IT quality and security certifications."
+    },
+    {
+        acronym: "ITIL",
+        expansion: "Information Technology Infrastructure Library", //[cite: 3]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A widely accepted framework of best practices for delivering aligned IT service management (ITSM).",
+        context: "Provides structured IT service management processes including Incident Management, Change Management, and Service Transition.",
+        hook: "The operational standard for delivering and managing IT support services across an enterprise."
+    },
+    {
+        acronym: "KPI",
+        expansion: "Key Performance Indicator", //[cite: 3]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "Quantifiable metrics used to evaluate the success and operational effectiveness of security programs over time.",
+        context: "Examples include Mean Time to Detect (MTTD), Mean Time to Remediate (MTTR), and patch deployment latency percentages.",
+        hook: "The scorecard metrics showing executives if security operational teams are meeting targets."
+    },
+    {
+        acronym: "LGPD",
+        expansion: "General Data Protection Law", //[cite: 3]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "Brazil's comprehensive data privacy regulatory framework, closely modeled after the EU GDPR.",
+        context: "Applies to any organization processing personal data of individuals located in Brazil, mandating legal basis for processing and privacy rights.",
+        hook: "Brazil's comprehensive privacy statute enforcing strict personal data rules."
+    },
+    {
+        acronym: "NIST CSF",
+        expansion: "National Institute of Standards and Technology Cybersecurity Framework", //[cite: 3]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A voluntary cybersecurity framework organized around core functions: Govern, Identify, Protect, Detect, Respond, Recover.",
+        context: "Serves as the primary risk baseline for enterprise cybersecurity posture assessment, maturity modeling, and GRC strategy.",
+        hook: "The premier US framework for building and auditing enterprise cybersecurity programs."
+    },
+    {
+        acronym: "PCI DSS",
+        expansion: "Payment Card Industry Data Security Standard", //[cite: 4]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An information security standard enforced by major credit card brands for organizations handling cardholder data.",
+        context: "Mandates strict network segmentation (Cardholder Data Environment - CDE), strong encryption, quarterly scanning, and file integrity monitoring.",
+        hook: "The mandatory security playbook required for processing credit card payments safely."
+    },
+    {
+        acronym: "PII",
+        expansion: "Personally Identifiable Information", //[cite: 4]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "Any data that can directly or indirectly identify a specific individual (e.g., SSN, name, email, biometric data).",
+        context: "Subject to strict regulatory protection mandates (GDPR, CCPA, HIPAA); requires encryption at rest/in transit, RBAC, and DLP monitoring.",
+        hook: "Any personal data item that can pinpoint exactly who you are."
+    },
+    {
+        acronym: "QA",
+        expansion: "Quality Assurance", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "The systematic monitoring and evaluation of software development processes to ensure quality and security standards.",
+        context: "Ensures software releases meet functional requirements and pass security testing gates before production release.",
+        hook: "The inspection line ensuring software meets safety and performance standards before launch."
+    },
+    {
+        acronym: "RACI",
+        expansion: "Responsible, Accountable, Consulted, and Informed", //[cite: 4]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A responsibility assignment matrix mapping operational roles and duties across project tasks and processes.",
+        context: "Clarifies decision-making authority and operational duties during incident response, threat hunting, and security auditing.",
+        hook: "The grid explicitly defining who does the work, who holds ultimate responsibility, and who gets notified."
+    },
+    {
+        acronym: "RPO",
+        expansion: "Recovery Point Objective", //[cite: 4]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "The maximum acceptable age of data that can be lost from an IT service disruption before causing serious business harm.",
+        context: "Dictates backup frequency architecture; an RPO of 15 minutes requires continuous replication or high-frequency snapshotting.",
+        hook: "The maximum amount of data loss (measured in time) your business can tolerate during an outage."
+    },
+    {
+        acronym: "RTO",
+        expansion: "Recovery Time Objective", //[cite: 4]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "The maximum acceptable duration of time an application or business process can remain offline following a disaster.",
+        context: "Dictates system recovery speed requirements; an RTO of 1 hour mandates active-active high availability or automated failover.",
+        hook: "The stopwatch measuring how quickly your IT systems must be back online after a crash."
+    },
+    {
+        acronym: "SLA",
+        expansion: "Service-level Agreement", //[cite: 5]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A formal commitment between a service provider and customer defining service metrics, uptime, and performance expectations.",
+        context: "Defines contractual performance requirements (e.g., 99.999% cloud uptime) along with financial penalties for breach of agreement.",
+        hook: "The binding contract guaranteeing specific uptime and response performance levels."
+    },
+    {
+        acronym: "SOC 2",
+        expansion: "System and Organization Controls 2", //[cite: 5]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An auditing framework evaluating service organizations across Trust Services Criteria: Security, Availability, Integrity, Confidentiality, Privacy.",
+        context: "Standard vendor risk assessment tool; SOC 2 Type II reports evaluate operational effectiveness of security controls over an extended audit window.",
+        hook: "The independent audit report proving a cloud vendor handles customer data securely over time."
+    }
+];
+        // BATCH 6: Network Infrastructure, Edge & Protocols
+const batch6Data = [
+    {
+        acronym: "AP",
+        expansion: "Access Point", //[cite: 1]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A networking hardware device that allows wireless Wi-Fi devices to connect to a wired network.",
+        context: "SecurityX focuses on securing APs using WPA3 enterprise authentication, rogue AP detection, and isolating guest SSIDs via VLANs.",
+        hook: "The central wireless doorway bridging over-the-air devices onto the physical enterprise network."
+    },
+    {
+        acronym: "CIDR",
+        expansion: "Classless Inter-Domain Routing", //[cite: 1]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A flexible IP address allocation method replacing legacy classful networking (Class A/B/C) with variable prefix lengths (e.g., /24).",
+        context: "Essential for designing enterprise network subnets, cloud VPC address spaces, and firewall rule aggregations.",
+        hook: "The slash notation shorthand specifying exact IP block size for network segmentation."
+    },
+    {
+        acronym: "CNAME",
+        expansion: "Canonical Name", //[cite: 1]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A DNS resource record type that maps an alias domain name to a true, canonical domain name.",
+        context: "Misconfigured or orphaned CNAME records create subdomain takeover vulnerabilities when cloud resources are deleted.",
+        hook: "A forwarding address in the DNS phonebook pointing one nickname to a main domain."
+    },
+    {
+        acronym: "DHCP",
+        expansion: "Dynamic Host Configuration Protocol", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A network management protocol that automatically assigns IP addresses and network parameters to joining endpoints.",
+        context: "Requires security controls like DHCP Snooping on switches to prevent Rogue DHCP servers and DHCP starvation attacks.",
+        hook: "The automated front-desk clerk handing out room keys and IP addresses to arriving guests."
+    },
+    {
+        acronym: "DMZ",
+        expansion: "Demilitarized Zone", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A isolated perimeter network segment containing public-facing services (web, mail) isolated between internal and external firewalls.",
+        context: "Prevents compromised public servers from directly accessing private enterprise databases and internal assets.",
+        hook: "The secure airlock buffer zone between the dangerous internet and your private internal network."
+    },
+    {
+        acronym: "DNS",
+        expansion: "Domain Name System", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "The hierarchical decentralized naming system translating human-readable hostnames into numeric IP addresses.",
+        context: "A primary vector for attack and defense; requires monitoring against DNS tunneling, cache poisoning, and fast-flux malware networks.",
+        hook: "The internet's master phonebook converting website names into numeric street addresses."
+    },
+    {
+        acronym: "DNSSEC",
+        expansion: "Domain Name System Security Extensions", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A suite of DNS extension specs adding cryptographic signatures to DNS records to verify authenticity.",
+        context: "Prevents DNS cache poisoning and man-in-the-middle redirection by ensuring DNS responses originate from valid domain owners.",
+        hook: "Stamping an unalterable digital signature onto every lookup response in the phonebook."
+    },
+    {
+        acronym: "DSL",
+        expansion: "Digital Subscriber Line", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A legacy communication medium transmitting digital data over local telephone copper lines.",
+        context: "Legacy WAN connectivity option being replaced by high-speed fiber and SD-WAN broadband links in modern branch architectures.",
+        hook: "Carrying digital data over traditional copper telephone lines."
+    },
+    {
+        acronym: "HTTP",
+        expansion: "Hypertext Transfer Protocol", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An unencrypted application-layer protocol used for transmitting hypermedia documents across the web (Port 80).",
+        context: "Insecure cleartext transport allowing packet sniffing and session hijacking; strictly prohibited in enterprise production.",
+        hook: "Sending postcards through the mail where anyone along the route can read the message."
+    },
+    {
+        acronym: "HTTPS",
+        expansion: "Hypertext Transfer Protocol Secure", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "The encrypted variant of HTTP utilizing TLS to secure browser-to-server communications (Port 443).",
+        context: "Delivers confidentiality, server authentication, and integrity; required across all enterprise web applications.",
+        hook: "Locking web requests inside tamper-evident, encrypted armored mail boxes."
+    },
+    {
+        acronym: "IEEE",
+        expansion: "Institute for Electrical and Electronics Engineers", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A global professional association setting foundational networking and electronics standards (e.g., 802.11 Wi-Fi, 802.1X NAC).",
+        context: "Defines underlying Layer 2 networking and security standards enforced across enterprise hardware.",
+        hook: "The international council establishing technical specs for Wi-Fi and Ethernet."
+    },
+    {
+        acronym: "IIS",
+        expansion: "Internet Information Services", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Microsoft's extensible web server software package integrated into Windows Server operating systems.",
+        context: "Requires hardening, module minimization, Request Filtering, and SCHANNEL TLS binding configuration to prevent enterprise web exploits.",
+        hook: "Microsoft's native web server engine powering corporate Windows web apps."
+    },
+    {
+        acronym: "ISP",
+        expansion: "Internet Service Provider", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A commercial organization delivering connectivity services to access the global internet.",
+        context: "Evaluated in enterprise resilience planning for dual-homed multi-provider redundancy and DDoS mitigation scrubbing services.",
+        hook: "Your gateway utility provider delivering raw pipeline access to the global internet."
+    },
+    {
+        acronym: "JSON",
+        expansion: "JavaScript Object Notation", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A lightweight, human-readable data-interchange text format based on key-value pairs.",
+        context: "The standard format for modern REST APIs, cloud logs, and SIEM feeds; requires schema validation to prevent injection flaws.",
+        hook: "The universal text-based language used by web applications to pass structured data."
+    },
+    {
+        acronym: "LAN",
+        expansion: "Local Area Network", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A computer network spanning a small physical area, such as a single building or office space.",
+        context: "Requires microsegmentation, port security, and 802.1X NAC to prevent unauthorized horizontal lateral movement.",
+        hook: "The high-speed private office network connecting computers inside a single building."
+    },
+    {
+        acronym: "MIME",
+        expansion: "Multipurpose Internet Mail Extensions", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An internet standard expanding email capabilities to support audio, video, executable attachments, and non-ASCII character sets.",
+        context: "Mail gateways scan MIME headers and attachments to block executable malware payloads and malicious content formats.",
+        hook: "The attachment format extension allowing emails to carry rich files and images."
+    },
+    {
+        acronym: "MPLS",
+        expansion: "Multiprotocol Label Switching", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A routing technique directing data between network nodes using short path labels rather than long network addresses.",
+        context: "Legacy private WAN backbone being replaced or supplemented by SD-WAN to cut transport costs and enable direct cloud routing.",
+        hook: "An express postal service routing packages using fast pre-assigned highway labels."
+    },
+    {
+        acronym: "MX",
+        expansion: "Mail Exchange", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A DNS resource record specifying the mail server responsible for accepting incoming email messages on behalf of a domain.",
+        context: "Targeted in email routing architecture; frequently points to Secure Email Gateways (SEGs) or cloud mail scrubbers before hitting inbox servers.",
+        hook: "The DNS signpost directing incoming mail carriers to your corporate mailroom door."
+    },
+    {
+        acronym: "NFS",
+        expansion: "Network File System", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A distributed file system protocol allowing remote hosts to mount file systems over a network.",
+        context: "Requires NFSv4 with Kerberos authentication and firewall restriction to prevent unauthenticated remote file access.",
+        hook: "A shared network filing cabinet mounted directly onto a remote computer desktop."
+    },
+    {
+        acronym: "NIC",
+        expansion: "Network Interface Card", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A hardware circuit board or chip installed in a computer providing physical network connectivity.",
+        context: "Monitored for promiscuous mode switching (indicating packet sniffing) and MAC spoofing activity.",
+        hook: "The physical plug-in socket connecting a machine directly to the network wire."
+    },
+    {
+        acronym: "NTP",
+        expansion: "Network Time Protocol", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A networking protocol used to synchronize system clocks across computer systems over packet-switched networks.",
+        context: "Crucial for log correlation in SIEM, Kerberos authentication (5-minute drift limit), and incident response forensic timelines.",
+        hook: "The master heartbeat clock synchronizing every system clock across your company."
+    },
+    {
+        acronym: "OOB",
+        expansion: "Out-of-band", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A dedicated secondary management network path isolated completely from primary operational production traffic.",
+        context: "Allows sysadmins to maintain secure management access to firewalls and switches even during production network outages or severe DDoS.",
+        hook: "A private back-door emergency phone line completely isolated from main office phones."
+    },
+    {
+        acronym: "PTR",
+        expansion: "Pointer Record", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A DNS record type used for Reverse DNS lookups, mapping an IP address back to its associated hostname.",
+        context: "Used by email anti-spam filters to verify sending mail server validity; missing PTR records lead to mail rejection.",
+        hook: "A reverse lookup phonebook matching a phone number back to its registered owner."
+    },
+    {
+        acronym: "QoS",
+        expansion: "Quality of Service", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "Network traffic prioritization mechanism guaranteeing throughput performance for critical applications (e.g., VoIP).",
+        context: "Prevents bandwidth exhaustion from non-essential traffic during network congestion or high-volume DDoS attacks.",
+        hook: "An express lane on a highway giving priority passage to emergency ambulances."
+    },
+    {
+        acronym: "RDP",
+        expansion: "Remote Desktop Protocol", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Microsoft's proprietary protocol providing a graphical interface to connect to another computer over a network (Port 3389).",
+        concept_alt: "Primary target for brute-force and ransomware attacks; must be guarded behind VPNs, MFA, and Bastion Hosts.",
+        context: "Must never be exposed directly to the internet; requires MFA, TLS encryption, and Bastion host isolation.",
+        hook: "A virtual window allowing you to view and control a distant PC desktop remotely."
+    },
+    {
+        acronym: "REST",
+        expansion: "Representational State Transfer", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An architectural style for designing networked APIs using standard HTTP requests (GET, POST, PUT, DELETE).",
+        context: "Requires HTTPS transport encryption, OAuth 2.0 token validation, and rate limiting to defend against automated abuse.",
+        hook: "A clean, standardized set of web rules for passing structured requests between applications."
+    },
+    {
+        acronym: "RF",
+        expansion: "Radio Frequency", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "Electromagnetic wave frequencies used for wireless communication signals (Wi-Fi, Cellular, Bluetooth).",
+        context: "Physical layer security considers RF signal bleed, Faraday shielding, directional antennas, and wireless jamming threats.",
+        hook: "The invisible electromagnetic radio waves carrying wireless signals through the air."
+    },
+    {
+        acronym: "SAN",
+        expansion: "Storage Area Network", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A specialized high-speed network providing block-level network access to consolidated data storage infrastructure.",
+        context: "Requires fabric isolation, LUN masking, Fibre Channel zoning, and storage-at-rest encryption to protect enterprise backups.",
+        hook: "A dedicated private high-speed network exclusively connecting servers to massive storage vaults."
+    },
+    {
+        acronym: "SDN",
+        expansion: "Software-defined Network", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An architecture separating the network control plane (management) from the data forwarding plane.",
+        context: "Enables programmable, dynamic microsegmentation and rapid automated security policy enforcement across cloud datacenters.",
+        hook: "Centralizing network brain management in software while letting hardware switches just pass traffic."
+    },
+    {
+        acronym: "SDR",
+        expansion: "Software-defined Radio", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A radio communication system where components traditionally implemented in hardware are implemented in software.",
+        context: "Used by security researchers and threat actors to capture, analyze, replay, or jam wireless signals (IoT, RF, cellular).",
+        hook: "A flexible radio tuner controlled entirely by software code on a computer."
+    },
+    {
+        acronym: "SD-WAN",
+        expansion: "Software-defined Wide Area Network", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An architecture managing WAN connections dynamically using software to route traffic across disparate transport links.",
+        context: "Replaces expensive MPLS circuits with secure, encrypted dynamic tunnels over public internet links with built-in SASE integration.",
+        hook: "A smart traffic navigator dynamically picking the fastest path across multiple internet links."
+    },
+    {
+        acronym: "SFTP",
+        expansion: "Secure File Transfer Protocol", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A secure file transfer protocol operating over an SSH channel (Port 22) providing file access and management.",
+        context: "Completely encrypts commands and file data in transit; replaces unencrypted legacy FTP and FTPS setups.",
+        hook: "Moving sensitive corporate files across an encrypted, bulletproof SSH tunnel."
+    },
+    {
+        acronym: "SMB",
+        expansion: "Server Message Block", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A network file-sharing protocol used in Windows environments for sharing files, printers, and serial ports (Port 445).",
+        context: "Historically targeted by severe worm exploits (e.g., EternalBlue/WannaCry); requires SMBv3 with mandatory encryption and port 445 block on perimeters.",
+        hook: "The standard Windows pipe used to share files and folders between network PCs."
+    },
+    {
+        acronym: "SMS",
+        expansion: "Short Message Service", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A text messaging service component of telephone and mobile communication systems.",
+        context: "Highly vulnerable to SIM swapping, SS7 interception, and phishing; strongly discouraged as a 2FA authentication factor.",
+        hook: "Standard cellular text messaging—convenient but vulnerable to SIM-swap hijacking."
+    },
+    {
+        acronym: "SMTP",
+        expansion: "Simple Mail Transfer Protocol", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An internet standard communication protocol for sending email messages across IP networks (Ports 25/587).",
+        context: "Requires modern extensions (STARTTLS, SPF, DKIM, DMARC) to prevent cleartext email transmission and domain spoofing.",
+        hook: "The mail delivery truck carrying email messages between server post offices."
+    },
+    {
+        acronym: "TCP",
+        expansion: "Transfer Control Protocol", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A core connection-oriented Transport Layer protocol guaranteeing ordered, reliable packet delivery via a 3-way handshake.",
+        context: "Targeted in SYN flood DDoS attacks; evaluated against UDP when designing stateful firewall and application connection rules.",
+        hook: "The reliable delivery contractor signing for and verifying every single package received."
+    },
+    {
+        acronym: "TOML",
+        expansion: "Tom's Obvious, Minimal Language", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A minimal, human-readable configuration file format designed to map unambiguously to hash tables.",
+        context: "Used in modern software development and DevOps toolchains for clear, easily audited software configuration files.",
+        hook: "A clean, simple configuration file format designed to be easy for humans to read."
+    },
+    {
+        acronym: "TTL",
+        expansion: "Time to Live", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A timer or counter mechanism in IP packets and DNS records that limits the lifespan or iteration of data.",
+        context: "Prevents infinite network routing loops; low DNS TTLs enable rapid failover switching but increase DNS server query load.",
+        hook: "A countdown expiration stamp preventing packets from wandering the internet forever."
+    },
+    {
+        acronym: "UDP",
+        expansion: "User Datagram Protocol", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A lightweight, connectionless Transport Layer protocol prioritizing speed over delivery verification.",
+        context: "Used for real-time streaming, VoIP, and DNS; vulnerable to IP spoofing and UDP reflection DDoS amplification attacks.",
+        hook: "Firing off unacknowledged messages at high speed without waiting for a delivery confirmation."
+    },
+    {
+        acronym: "URI",
+        expansion: "Uniform Resource Identifier", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A compact string of characters identifying or naming a physical or abstract resource on a network.",
+        context: "Inspected by WAFs and proxies to detect path traversal attempts, malicious parameter injections, and resource spoofing.",
+        hook: "The universal string tag identifying any resource location or name on the web."
+    },
+    {
+        acronym: "URL",
+        expansion: "Uniform Resource Locator", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A specific type of URI providing the address and protocol used to locate a web resource (e.g., https://example.com).",
+        context: "Analyzed by web filtering systems, CASBs, and DNS proxies to block malicious phishing sites and C2 domains.",
+        hook: "The complete web address typed into a browser address bar."
+    },
+    {
+        acronym: "VLAN",
+        expansion: "Virtual Local Area Network", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A logical subnetwork grouping endpoints independently of physical location using IEEE 802.1Q switch tags.",
+        context: "Essential for network segmentation; isolates sensitive departments (e.g., PCI compliance, IoT, guest Wi-Fi) to limit broadcast domains.",
+        hook: "Dividing a single physical switch into multiple isolated virtual network zones."
+    },
+    {
+        acronym: "VoIP",
+        expansion: "Voice Over Internet Protocol", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A technology delivering voice communications and multimedia sessions over IP networks.",
+        context: "Requires SIP encryption (TLS), SRTP media encryption, and dedicated VLAN segmentation to prevent eavesdropping and toll fraud.",
+        hook: "Converting voice telephone calls into encrypted IP data packets moving over the internet."
+    },
+    {
+        acronym: "VPN",
+        expansion: "Virtual Private Network", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An encrypted network tunnel extending a private network across a public or untrusted network.",
+        context: "Being superseded by Zero Trust Network Access (ZTNA); traditional full-tunnel VPNs grant over-privileged network access upon connection.",
+        hook: "A protected, encrypted pipe passing traffic safely across the public internet."
+    },
+    {
+        acronym: "VXLAN",
+        expansion: "Virtual Extensible Local Area Network", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A network virtualization technology encapsulating Layer 2 Ethernet frames within Layer 4 UDP packets.",
+        context: "Expands cloud datacenter segmentation capacity beyond the 4,096 VLAN limit up to 16 million virtual networks.",
+        hook: "Supercharging network isolation capability so cloud datacenters can host millions of isolated zones."
+    },
+    {
+        acronym: "WAF",
+        expansion: "Web Application Firewall", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A specialized Layer 7 firewall inspecting HTTP/HTTPS traffic to defend web applications against application attacks.",
+        context: "Defends against OWASP Top 10 vulnerabilities (SQLi, XSS, CSRF) by inspecting request payloads before reaching web servers.",
+        hook: "A specialized security guard inspecting web browser traffic for malicious code injections."
+    },
+    {
+        acronym: "WAN",
+        expansion: "Wide Area Network", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A telecommunications network spanning large geographical distances, connecting geographically separated offices.",
+        context: "Secured using IPsec VPNs, SD-WAN encryption, and perimeter firewalls to protect inter-site communications.",
+        hook: "The long-distance network highway connecting geographically separated corporate branch offices."
+    },
+    {
+        acronym: "WIPS",
+        expansion: "Wireless Intrusion Prevention System", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A dedicated security monitoring solution inspecting radio spectrum to detect and block rogue APs and wireless attacks.",
+        context: "Detects rogue access points, deauthentication floods, evil twin attacks, and unauthorized ad-hoc connections in real time.",
+        hook: "The radar scanner constantly monitoring radio airwaves to block rogue Wi-Fi hardware."
+    },
+    {
+        acronym: "WLAN",
+        expansion: "Wireless Local Area Network", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A wireless local network linking two or more devices using high-frequency radio waves within a limited area.",
+        context: "Requires robust enterprise authentication (802.1X/EAP-TLS), client isolation, and encryption to prevent airwave eavesdropping.",
+        hook: "The localized wireless network providing Wi-Fi coverage across an office building."
+    },
+    {
+        acronym: "WPA",
+        expansion: "Wi-Fi Protected Access", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A security standard developed by the Wi-Fi Alliance to secure wireless computer networks.",
+        context: "SecurityX tests transitioning from vulnerable WPA/WPA2 to WPA3-Enterprise featuring SAE encryption and 192-bit cryptographic suites.",
+        hook: "The encryption protocol standard guarding wireless Wi-Fi connections."
+    },
+    {
+        acronym: "XML",
+        expansion: "Extensible Markup Language", //[cite: 6]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A flexible, structured markup language used for encoding documents in a format readable by both humans and machines.",
+        context: "Vulnerable to XML External Entity (XXE) injection attacks if XML parsers do not disable external DTD resolving.",
+        hook: "A structured, tag-based text format used to pass complex data between enterprise applications."
+    },
+    {
+        acronym: "YAML",
+        expansion: "Yet Another Markup Language", //[cite: 6]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A human-friendly data serialization language commonly used for configuration files and infrastructure automation.",
+        context: "Used extensively in Kubernetes manifests, CI/CD pipeline definitions, and Ansible playbooks; vulnerable to unsafe deserialization.",
+        hook: "A clean, indentation-based configuration language used heavily in cloud automation."
+    }
+];
+        // BATCH 7: SOC Operations, Threat Detection & Incidents
+const batch7Data = [
+    {
+        acronym: "APT",
+        expansion: "Advanced Persistent Threat", //[cite: 1]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A stealthy threat actor, typically state-sponsored or organized cybercrime group, that conducts prolonged covert operations.",
+        context: "Focuses on long-term stealth, living-off-the-land techniques, and low-and-slow exfiltration rather than quick destructive attacks.",
+        hook: "A master burglar hiding in your attic for months, quietly copying documents without turning on lights."
+    },
+    {
+        acronym: "AQL",
+        expansion: "Ariel Query Language", //[cite: 1]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A specialized SQL-like query language used in IBM QRadar SIEM to search and aggregate event data.",
+        context: "Used by threat hunters and SOC analysts to query raw log events and flow telemetry across enterprise SIEM instances.",
+        hook: "The specialized search syntax used to query IBM QRadar security databases."
+    },
+    {
+        acronym: "BEAST",
+        expansion: "Browser Exploit against SSL/TLS", //[cite: 1]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A legacy cryptographic side-channel attack targeting TLS 1.0 Cipher Block Chaining (CBC) modes.",
+        context: "Historical vulnerability demonstrating why legacy TLS 1.0/1.1 protocols and CBC mode ciphers must be disabled across web servers.",
+        hook: "An old web browser exploit that cracked early encrypted web sessions."
+    },
+    {
+        acronym: "C2",
+        expansion: "Command and Control", //[cite: 1]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An infrastructure path used by attackers to maintain communications with compromised systems inside a target network.",
+        context: "Analyzed via DNS logs, web proxies, and NDR to block malicious beaconing traffic and isolate infected endpoints.",
+        hook: "The remote walkie-talkie link between a hacker and malware infected inside your network."
+    },
+    {
+        acronym: "CSRF",
+        expansion: "Cross-site Request Forgery", //[cite: 2]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An attack forcing an authenticated end user's browser to send forged HTTP requests to a vulnerable web application.",
+        context: "Mitigated by implementing anti-CSRF tokens, SameSite cookie attributes, and re-authentication for sensitive actions.",
+        hook: "Tricking an authenticated user into unknowingly signing a fraudulent check."
+    },
+    {
+        acronym: "DDoS",
+        expansion: "Distributed Denial of Service", //[cite: 2]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A malicious attempt to disrupt server or network availability by flooding target infrastructure with traffic from a botnet.",
+        context: "Mitigated using cloud scrubbers, Anycast routing, rate limiting, and automated CDN/WAF volumetric traffic filtering.",
+        hook: "An organized flash mob clogging every entrance door to an office building."
+    },
+    {
+        acronym: "DLP",
+        expansion: "Data Loss Prevention", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A software solution detecting and preventing unauthorized extraction or transmission of sensitive enterprise data.",
+        context: "Enforces policies across endpoints (USB blocking), network perimeters (email scanning), and cloud storage (SaaS auditing).",
+        hook: "An automated security checkpoint at the exit doors inspecting all outgoing briefcase contents."
+    },
+    {
+        acronym: "DoS",
+        expansion: "Denial of Service", //[cite: 2]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An attack originating from a single source attempting to render a computer system or network resource unavailable.",
+        context: "Contrasted with DDoS; target system resources are exhausted using specific protocol bugs (SYN flood) or resource hogging.",
+        hook: "A single caller ringing a phone non-stop so no other customer can call in."
+    },
+    {
+        acronym: "EDR",
+        expansion: "Endpoint Detection and Response", //[cite: 2]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An endpoint security solution providing real-time activity monitoring, behavioral analysis, and automated threat isolation.",
+        context: "Crucial for SOC visibility; records process execution, memory modification, and network connections to allow remote host quarantine.",
+        hook: "A high-definition security camera recording every action taking place on an individual PC."
+    },
+    {
+        acronym: "FIM",
+        expansion: "File Integrity Monitoring", //[cite: 2]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An auditing control that continuously validates operating system and application files using cryptographic hashing.",
+        context: "Alerts SOC teams whenever critical system files, binaries, or registry keys are modified unexpectedly (PCI DSS mandate).",
+        hook: "A digital wax seal continuously checking if system files have been altered."
+    },
+    {
+        acronym: "HIDS",
+        expansion: "Host-based Intrusion Detection System", //[cite: 2]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A security agent installed on a single host system that monitors local system logs, file modifications, and OS events.",
+        context: "Passive monitoring agent providing endpoint event detection without active inline threat blocking capabilities.",
+        hook: "A quiet security alarm installed inside a specific computer host room."
+    },
+    {
+        acronym: "HIPS",
+        expansion: "Host-based Intrusion Prevention System", //[cite: 2]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An active security agent installed on a host system that actively detects and blocks malicious process executions and memory attacks.",
+        context: "Inline defense operating at the host OS level; actively blocks unauthorized driver loads, privilege escalation, and memory dumps.",
+        hook: "An armed security guard sitting inside the OS actively stopping malicious commands."
+    },
+    {
+        acronym: "IDS",
+        expansion: "Intrusion Detection System", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A passive network monitoring technology analyzing network traffic copies (via SPAN/TAP ports) to generate security alerts.",
+        context: "OutOf-band monitoring tool that alerts on signature matches without delaying network throughput or dropping packets inline.",
+        hook: "A motion-detector sensor that sounds an alarm when it sees suspicious activity."
+    },
+    {
+        acronym: "IPS",
+        expansion: "Intrusion Prevention System", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An active inline security device inspecting live traffic and automatically dropping malicious packets in real time.",
+        context: "Placed inline along network pathways; introduces latency trade-offs and risks blocking legitimate traffic on false positives.",
+        hook: "An active tollbooth guard stopping and turning back malicious vehicles at the gate."
+    },
+    {
+        acronym: "IRT",
+        expansion: "Incident Response Team", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A designated group of cybersecurity professionals responsible for responding to, containing, and remediating security incidents.",
+        context: "Executes the NIST Incident Response lifecycle: Preparation, Detection & Analysis, Containment, Eradication & Recovery, Post-Incident.",
+        hook: "The specialized SWAT fire brigade responding to an active enterprise breach alarm."
+    },
+    {
+        acronym: "MSSP",
+        expansion: "Managed Security Service Provider", //[cite: 3]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "An outsourced third-party service provider delivering delegated security monitoring and management services.",
+        context: "Evaluated in hybrid SOC architectures; requires SLA monitoring, strict data privacy controls, and API integration with internal teams.",
+        hook: "Outsourcing your building security monitoring to an external 24/7 security agency."
+    },
+    {
+        acronym: "NDR",
+        expansion: "Network Detection and Response", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A security solution using behavioral analysis and ML to continuously analyze network traffic flows across subnets.",
+        context: "Fills visibility gaps where EDR agents cannot be installed (IoT, OT, unmanaged devices); detects lateral movement and C2 channels.",
+        hook: "A smart radar monitoring traffic flow across all corridors in an office building."
+    },
+    {
+        acronym: "NIDS",
+        expansion: "Network-based Intrusion Detection System", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A passive IDS deployed at strategic network choke points to monitor traffic across entire subnets.",
+        context: "Inspects raw network packets out-of-band via mirror ports; restricted by encrypted TLS traffic streams.",
+        hook: "A passive wiretap monitoring calls across an entire phone switchboard."
+    },
+    {
+        acronym: "NIPS",
+        expansion: "Network-based Intrusion Prevention System", //[cite: 3]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An inline IPS device deployed at network choke points to actively inspect and drop malicious network traffic.",
+        context: "Placed inline between network zones; requires high-throughput processing hardware and bypass switches to prevent network blackouts.",
+        hook: "An inline filter physical gate scrubbing malicious packets out of the network wire."
+    },
+    {
+        acronym: "RAT",
+        expansion: "Remote Access Trojan", //[cite: 4]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A malware strain providing threat actors with covert administrative remote control over a victim host system.",
+        context: "Provides attackers with keylogging, screenshot capture, file exfiltration, and shell command execution capabilities.",
+        hook: "A Trojan horse containing an invisible remote controller for an attacker."
+    },
+    {
+        acronym: "RCE",
+        expansion: "Remote Code Execution", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A severe software vulnerability allowing an attacker to execute arbitrary commands or code on a target host over a network.",
+        context: "High-priority critical flaw (CVSS 9.0-10.0); allows threat actors to drop web shells, escalate privileges, and install RATs.",
+        hook: "A severe bug letting a stranger run terminal commands on your server over the web."
+    },
+    {
+        acronym: "SIEM",
+        expansion: "Security Information Event Management", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A centralized platform aggregating log data, events, and telemetry across enterprise systems to provide correlation and alerting.",
+        context: "The central nervous system of the SOC; ingests firewall, EDR, and cloud logs to trigger correlation rules and incident tickets.",
+        hook: "The central control room receiving and correlating feeds from every alarm and camera."
+    },
+    {
+        acronym: "SOAR",
+        expansion: "Security Orchestration, Automation, and Response", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A software solution integrating disparate security platforms to automate incident response workflows via playbooks.",
+        context: "Works alongside SIEM to automate repetitive SOC tasks (quarantining hosts, blocking IPs, gathering CTI) without human latency.",
+        hook: "The automated robot executing pre-written emergency playbooks when alarms trip."
+    },
+    {
+        acronym: "SoC",
+        expansion: "System-on-Chip", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An integrated circuit that consolidates all components of a computer (CPU, memory, I/O ports) onto a single substrate.",
+        context: "Common in IoT, mobile, and embedded hardware; security challenges involve immutable firmware bugs and limited hardware TPM access.",
+        hook: "Shrinking an entire computer motherboard down onto a single silicon chip."
+    },
+    {
+        acronym: "SOC",
+        expansion: "Security Operations Center", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A centralized command facility housing personnel, tools, and processes responsible for continuously monitoring enterprise security posture.",
+        context: "Operates 24/7/365 to perform threat monitoring, incident response, vulnerability management, and threat hunting.",
+        hook: "The 24/7 mission control room manned by cybersecurity analysts."
+    },
+    {
+        acronym: "SSRF",
+        expansion: "Server-side Request Forgery", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A web vulnerability allowing an attacker to coerce a server-side application into making unintended HTTP requests to internal resources.",
+        context: "Exploited in cloud environments (e.g., AWS IMDSv1) to steal cloud metadata credentials from internal link-local IP addresses.",
+        hook: "Tricking a trusted internal server into fetching secret internal files for an external attacker."
+    },
+    {
+        acronym: "TOCTOU",
+        expansion: "Time of Check, Time of Use", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A software race condition vulnerability where system state changes between the condition checking time and execution time.",
+        context: "Exploited by swapping file handles or symlinks after access validation succeeds but prior to file writing or execution.",
+        hook: "A race condition where a bad actor swaps the target file right after the security guard checks your ticket."
+    },
+    {
+        acronym: "UBA",
+        expansion: "User Behavior Analytics", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A cybersecurity process tracking and analyzing historical human user access patterns to detect anomalous behavior.",
+        context: "Establishes user baseline activity to identify compromised credentials, impossible travel events, and insider threat patterns.",
+        hook: "Monitoring employee work habits to sound an alarm if someone behaves abnormally."
+    },
+    {
+        acronym: "UEBA",
+        expansion: "User & Entity Behavior Analytics", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "An evolution of UBA that analyzes behavioral anomalies across both human users and non-human entities (devices, IP addresses, service accounts).",
+        context: "Uses machine learning to detect subtle insider threats, rogue service account abuse, and compromised endpoints beyond basic rule thresholds.",
+        hook: "Analyzing behavior baselines for both employees and corporate machines/service accounts."
+    },
+    {
+        acronym: "VSS",
+        expansion: "Volume Shadow Copy Service", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A native Microsoft Windows framework allowing automated backup snapshots of computer volumes or files while actively in use.",
+        context: "Primary target during ransomware attacks; malware scripts run `vssadmin delete shadows` to prevent easy system restoration.",
+        hook: "The background Windows snapshot feature taking live system restore points."
+    },
+    {
+        acronym: "XDR",
+        expansion: "Extended Detection and Response", //[cite: 6]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A SaaS-based security platform unifying threat telemetry across endpoints, network, email, cloud workloads, and identity silos.",
+        context: "Evolves beyond standalone EDR by natively correlating alerts across multiple layers of the enterprise security stack.",
+        hook: "Connecting security cameras from endpoints, networks, and cloud into a single smart monitor."
+    },
+    {
+        acronym: "XSS",
+        expansion: "Cross-site Scripting", //[cite: 6]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An application injection vulnerability where malicious client-side scripts are injected into trusted web applications.",
+        context: "Categorized into Stored, Reflected, and DOM-based XSS; mitigated via strict context-aware output encoding and Content Security Policies (CSP).",
+        hook: "Injecting malicious JavaScript code into a public webpage so it runs on visitor web browsers."
+    },
+    {
+        acronym: "YARA",
+        expansion: "Yet Another Recursive Acronym", //[cite: 6]
+        domain: "Domain 4.0: Security Operations",
+        concept: "A pattern-matching rule language used by malware researchers and threat hunters to classify and identify malware samples.",
+        context: "Used across EDRs, SIEMs, and memory forensics tools to write custom detection signatures matching byte sequences or string patterns.",
+        hook: "Writing custom text search rules to identify and tag specific malware families."
+    }
+];
+        // BATCH 8: Systems, Hardware, Endpoints & OT Security
+const batch8Data = [
+    {
+        acronym: "ASLR",
+        expansion: "Address Space Layout Randomization", //[cite: 1]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A memory protection defense that randomizes the memory location of program execution key data areas.",
+        context: "Defends operating system memory against buffer overflow attacks, return-oriented programming (ROP), and shellcode execution.",
+        hook: "Shuffling apartment door numbers in a building every time someone walks in so intruders can't find target rooms."
+    },
+    {
+        acronym: "BIOS",
+        expansion: "Basic Input/Output System", //[cite: 1]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Legacy firmware initializing hardware during bootup before passing control to the operating system.",
+        context: "Legacy firmware vulnerable to rootkits and lacking cryptographic boot validation; superseded by Secure Boot / UEFI.",
+        hook: "The old startup ignition switch waking up computer components."
+    },
+    {
+        acronym: "CPU",
+        expansion: "Central Processing Unit", //[cite: 2]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "The primary electronic circuitry executing instructions that make up a computer program.",
+        context: "Hardware target for speculative execution side-channel attacks (Spectre/Meltdown); requires microcode updates and hardware isolation.",
+        hook: "The main brain executing every instruction inside a computer."
+    },
+    {
+        acronym: "DEP",
+        expansion: "Data Execution Prevention", //[cite: 2]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A system security feature marking memory regions (like the stack or heap) as non-executable.",
+        context: "Prevents malicious code execution from memory locations designated solely for data storage; works alongside ASLR.",
+        hook: "Putting up a 'No Running' sign over data storage rooms so code cannot execute inside them."
+    },
+    {
+        acronym: "EMI",
+        expansion: "Electromagnetic Interference", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "Disturbance generated by external electromagnetic fields affecting electrical circuits via induction or radiation.",
+        context: "Physical security consideration for high-security environments; mitigated using TEMPEST shielding, metallic conduits, and fiber cables.",
+        hook: "Electromagnetic noise interfering with clear wired communications."
+    },
+    {
+        acronym: "EMP",
+        expansion: "Electromagnetic Pulse", //[cite: 2]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A brief high-intensity burst of electromagnetic energy capable of damaging unshielded electronic equipment.",
+        context: "Requires Faraday cages, surge suppressors, and hardened infrastructure for critical military/national security datacenters.",
+        hook: "A high-energy shockwave frying unshielded electronics instantly."
+    },
+    {
+        acronym: "EOL",
+        expansion: "End-of-life", //[cite: 2]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "The status of a product when a vendor ceases manufacturing, selling, and issuing security patches for it.",
+        context: "Creates severe compliance and operational risks; unsupported EOL systems require compensatory controls (network isolation, virtual patching).",
+        hook: "A retired product no longer receiving safety patches from the manufacturer."
+    },
+    {
+        acronym: "FDE",
+        expansion: "Full Disk Encryption", //[cite: 2]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Cryptographic protection encrypting an entire storage volume, including operating system, swap space, and application data.",
+        context: "Protects data-at-rest against physical theft or lost endpoints (e.g., BitLocker, FileVault); backed by hardware TPM keys.",
+        hook: "Locking the entire physical filing cabinet inside a giant vault."
+    },
+    {
+        acronym: "HKLM",
+        expansion: "Hkey_Local_Machine", //[cite: 2]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A core subtree configuration hive in the Microsoft Windows Registry containing machine-wide OS and software settings.",
+        context: "Frequently targeted by malware persistence mechanisms (Run keys) and privilege escalation registry tweaks.",
+        hook: "The central master system registry vault for a Windows machine."
+    },
+    {
+        acronym: "HVAC",
+        expansion: "Heating Ventilation and Air Conditioning", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "Environmental systems maintaining temperature, humidity, and airflow within server rooms and datacenters.",
+        context: "Physical infrastructure requirement; temperature/humidity spikes crash hardware, while unsegmented smart HVAC networks introduce IoT attack paths.",
+        hook: "The climate control system keeping datacenter servers cool and running."
+    },
+    {
+        acronym: "ICS",
+        expansion: "Industrial Control System", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An umbrella term for command and control hardware/software used to operate industrial equipment and physical infrastructure.",
+        context: "Governed by Purdue Model architecture; prioritizes safety/availability over confidentiality and requires air-gapping from IT networks.",
+        hook: "The specialized digital control room operating physical factory equipment."
+    },
+    {
+        acronym: "IoT",
+        expansion: "Internet of Things", //[cite: 3]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A network of physical devices embedded with sensors, processing ability, and software connecting to the internet.",
+        context: "Introduces widespread perimeter risk; notorious for hardcoded credentials, unpatched firmware, and use in massive DDoS botnets.",
+        hook: "Smart everyday appliances connected to the internet."
+    },
+    {
+        acronym: "JTAG",
+        expansion: "Joint Test Action Group", //[cite: 3]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An industry hardware standard for testing printed circuit boards and debugging embedded chips directly.",
+        context: "Hardware attack vector; exposed physical JTAG header pins allow threat actors to extract device firmware and flash memory.",
+        hook: "The hardware debugging back-door port welded onto electronic circuit boards."
+    },
+    {
+        acronym: "OEM",
+        expansion: "Original Equipment Manufacturer", //[cite: 3]
+        domain: "Domain 1.0: Governance, Risk, and Compliance",
+        concept: "A company that manufactures hardware components or systems sold and rebranded by another vendor.",
+        context: "Requires supply chain security auditing to detect counterfeit hardware components and pre-installed firmware backdoors.",
+        hook: "The original factory making the physical hardware inside branded products."
+    },
+    {
+        acronym: "OS",
+        expansion: "Operating System", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "System software managing computer hardware, software resources, and common services for computer programs.",
+        context: "Must be hardened via OS baselines (CIS benchmarks), regular patch management cycles, and least-privilege user controls.",
+        hook: "The master software orchestrating hardware tools and applications."
+    },
+    {
+        acronym: "OT",
+        expansion: "Operational Technology", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "Hardware and software that detects or causes a change through direct monitoring and control of physical devices.",
+        context: "Controls physical processes in energy, water, and manufacturing; failure directly threatens physical human safety.",
+        hook: "Technology that directly moves physical valves, gears, and power grids."
+    },
+    {
+        acronym: "OTA",
+        expansion: "Over-the-air", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Wireless distribution of new software, firmware updates, or configuration settings to mobile and IoT endpoints.",
+        context: "Requires cryptographic signature verification and encrypted transport channels to prevent malicious firmware flashing.",
+        hook: "Beam-delivering software updates wirelessly over the air."
+    },
+    {
+        acronym: "PLC",
+        expansion: "Programmable Logic Controller", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "An industrial digital computer ruggedized for control of manufacturing processes and machinery execution.",
+        context: "Sits at Level 1 of the Purdue Model; targeted by high-level cyber weapons (e.g., Stuxnet) to alter physical machinery operations.",
+        hook: "The ruggedized micro-computer physically turning factory valves and motors on and off."
+    },
+    {
+        acronym: "SCADA",
+        expansion: "Supervisory Control and Data Acquisition", //[cite: 4]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A control system architecture using computers, networked data communications, and graphical user interfaces for high-level process supervisory management.",
+        context: "Manages widespread physical infrastructure (power grids, water treatment plants) across large geographic regions.",
+        hook: "The master supervisory control dashboard governing entire power and water utility networks."
+    },
+    {
+        acronym: "SCCM",
+        expansion: "System Center Configuration Management", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Microsoft's enterprise endpoint management suite for deploying OS updates, patches, software, and configuration policies.",
+        context: "High-privilege management platform; if compromised, allows an attacker to automatically push malicious payloads to all domain endpoints.",
+        hook: "Microsoft's central enterprise deployment pipeline for patching workstations."
+    },
+    {
+        acronym: "SED",
+        expansion: "Self-encrypting Drive", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A hard disk or solid-state drive with a circuit built directly into the drive controller to encrypt all written data automatically.",
+        context: "Offloads encryption processing from host CPU to drive hardware; enables instantaneous secure cryptographic erasure.",
+        hook: "A hard drive with its own built-in hardware encryption brain."
+    },
+    {
+        acronym: "SELinux",
+        expansion: "Security-enhanced Linux", //[cite: 4]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A Linux kernel security module providing Mandatory Access Control (MAC) policies for processes, files, and users.",
+        context: "Enforces fine-grained access limits on Linux systems; confines compromised daemons so attackers cannot escalate to root.",
+        hook: "An un-bypassable security guard built inside the Linux kernel enforcing military-grade rules."
+    },
+    {
+        acronym: "SEO",
+        expansion: "Search Engine Optimization", //[cite: 4]
+        domain: "Domain 4.0: Security Operations",
+        concept: "The process of improving web traffic volume and quality to a website from search engines.",
+        context: "Targeted in 'SEO Poisoning' attacks where threat actors manipulate search algorithms to push malware-laden web links to top results.",
+        hook: "Optimizing website visibility—manipulated by hackers to trick users into downloading malware."
+    },
+    {
+        acronym: "SoC",
+        expansion: "System-on-Chip", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An microchip integrating all components of a computer system onto a single integrated circuit substrate.",
+        context: "Foundational hardware in mobile, automotive, and IoT architectures; security centers around secure boot ROMs and hardware key storage.",
+        hook: "Compressing an entire PC motherboard down onto a single silicon chip."
+    },
+    {
+        acronym: "SQL",
+        expansion: "Structured Query Language", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A standardized domain-specific programming language designed for managing data held in relational database management systems.",
+        context: "Vulnerable to SQL Injection (SQLi); mitigated using parameterized queries (prepared statements) and input sanitization.",
+        hook: "The standard database query language used to fetch and update stored tables."
+    },
+    {
+        acronym: "SSD",
+        expansion: "Solid-state Drive", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A non-volatile solid-state storage device using flash memory to store persistent enterprise data.",
+        context: "Requires special cryptographic erase sanitization commands (ATA Secure Erase) due to wear-leveling algorithms preventing standard overwriting.",
+        hook: "High-speed flash memory storage replacing mechanical spinning disk drives."
+    },
+    {
+        acronym: "UEFI",
+        expansion: "Unified Extensible Firmware Interface", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "Modern boot firmware specification replacing legacy BIOS, providing digital signature validation for bootloaders.",
+        context: "Enforces Secure Boot to verify driver and bootloader signatures, preventing bootkits and unauthorized OS tamper attempts.",
+        hook: "The modern cryptographic system ignition verifying digital badges before booting the OS."
+    },
+    {
+        acronym: "UID",
+        expansion: "Unique Identifier", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "A numeric value or string assigned to a specific system entity, user account, or process within an operating system.",
+        context: "Used in POSIX/Linux systems to evaluate permissions (e.g., UID 0 is root); monitored for unprivileged account UID elevation.",
+        hook: "The distinct numeric badge number assigned to a specific user or process."
+    },
+    {
+        acronym: "USB",
+        expansion: "Universal Serial Bus", //[cite: 5]
+        domain: "Domain 3.0: Security Engineering",
+        concept: "An industry plug-and-play standard for cables, connectors, and protocols used for connection, communication, and power supply.",
+        context: "Vector for physical data exfiltration and hardware attacks (BadUSB, Rubber Ducky); controlled via endpoint DLP port blocking.",
+        hook: "The standard hardware cable plug used for peripheral devices."
+    },
+    {
+        acronym: "UTC",
+        expansion: "Coordinated Universal Time", //[cite: 5]
+        domain: "Domain 4.0: Security Operations",
+        concept: "The primary time standard by which the world regulates clocks and time across international boundaries.",
+        context: "Mandatory standard for log timestamping across enterprise global infrastructure to enable accurate forensic correlation during incidents.",
+        hook: "The master universal clock baseline ensuring log files match perfectly worldwide."
+    },
+    {
+        acronym: "VDI",
+        expansion: "Virtual Desktop Infrastructure", //[cite: 5]
+        domain: "Domain 2.0: Security Architecture",
+        concept: "A desktop virtualization technology hosting user desktop environments on centralized remote servers.",
+        context: "Enhances data protection by keeping data inside central datacenters rather than on local physical endpoints.",
+        hook: "Streaming a desktop environment from a secure central server directly to a thin client device."
+    }
+];
+
+        // CONCATENATE ALL BATCHES INTO MASTER DATA
+        const masterAcronymData = [
+            ...batch1Data,
+            ...batch2Data,
+            ...batch3Data,
+            ...batch4Data,
+            ...batch5Data,
+            ...batch6Data,
+            ...batch7Data,
+            ...batch8Data
+        ];
+
+        // ==========================================
+        // 2. STATE & CORE APP LOGIC
+        // ==========================================
+        let currentDeck = [];
+        let currentIndex = 0;
+        let isTableView = false;
+        let masteredSet = new Set(JSON.parse(localStorage.getItem('secx_mastered') || '[]'));
+
+        function init() {
+            applyFilters();
+            setupTouchGestures();
+            document.addEventListener('keydown', handleKeyPress);
+        }
+
+        function applyFilters() {
+            const domainVal = document.getElementById('domain-filter').value;
+            const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+
+            currentDeck = masterAcronymData.filter(item => {
+                const matchesDomain = domainVal === 'ALL' || item.domain.includes(domainVal);
+                const matchesSearch = item.acronym.toLowerCase().includes(searchVal) || 
+                                     item.expansion.toLowerCase().includes(searchVal) ||
+                                     item.concept.toLowerCase().includes(searchVal);
+                return matchesDomain && matchesSearch;
+            });
+
+            currentIndex = 0;
+            updateProgress();
+            renderCard();
+            renderTable();
+        }
+
+        function renderCard() {
+            const card = document.getElementById('card');
+            card.classList.remove('flipped');
+
+            if (currentDeck.length === 0) {
+                document.getElementById('card-acronym').innerText = "EMPTY";
+                document.getElementById('card-domain').innerText = "NONE";
+                document.getElementById('card-title').innerText = "No Matching Acronyms Found";
+                document.getElementById('card-concept').innerText = "Try adjusting your search or domain filter.";
+                document.getElementById('card-context').innerText = "N/A";
+                document.getElementById('card-hook').innerText = "N/A";
+                return;
+            }
+
+            if (currentIndex >= currentDeck.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = currentDeck.length - 1;
+
+            const item = currentDeck[currentIndex];
+            
+            // Front
+            document.getElementById('card-acronym').innerText = item.acronym;
+            document.getElementById('card-domain').innerText = item.domain;
+            
+            // Back
+            document.getElementById('card-back-domain').innerText = item.domain;
+            document.getElementById('card-title').innerText = `${item.acronym} — ${item.expansion}`;
+            document.getElementById('card-concept').innerText = item.concept;
+            document.getElementById('card-context').innerText = item.context;
+            document.getElementById('card-hook').innerText = item.hook;
+        }
+
+        function flipCard() {
+            document.getElementById('card').classList.toggle('flipped');
+        }
+
+        function markCard(mastered, e) {
+            if (e) e.stopPropagation();
+            if (currentDeck.length === 0) return;
+
+            const item = currentDeck[currentIndex];
+            if (mastered) {
+                masteredSet.add(item.acronym);
+            } else {
+                masteredSet.delete(item.acronym);
+            }
+
+            localStorage.setItem('secx_mastered', JSON.stringify([...masteredSet]));
+            updateProgress();
+            
+            currentIndex = (currentIndex + 1) % currentDeck.length;
+            renderCard();
+        }
+
+        function updateProgress() {
+            const total = masterAcronymData.length;
+            const mastered = masteredSet.size;
+            const remaining = total - mastered;
+            const percentage = total > 0 ? (mastered / total) * 100 : 0;
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-mastered').innerText = mastered;
+            document.getElementById('stat-remaining').innerText = remaining;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+        }
+
+        // ==========================================
+        // 3. TABLE VIEW & UTILITIES
+        // ==========================================
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            currentDeck.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="table-acronym">${item.acronym}</td>
+                    <td>${item.expansion}</td>
+                    <td><span class="badge" style="position:static;">${item.domain}</span></td>
+                    <td>${item.concept}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleViewMode() {
+            isTableView = !isTableView;
+            const flashcardView = document.getElementById('flashcard-view');
+            const tableView = document.getElementById('table-view');
+            const btn = document.getElementById('view-mode-btn');
+
+            if (isTableView) {
+                flashcardView.style.display = 'none';
+                tableView.style.display = 'block';
+                btn.innerText = 'Card View';
+            } else {
+                flashcardView.style.display = 'block';
+                tableView.style.display = 'none';
+                btn.innerText = 'Table View';
+            }
+        }
+
+        // ==========================================
+        // 4. TOUCH SWIPE & KEYBOARD LISTENERS
+        // ==========================================
+        function setupTouchGestures() {
+            const card = document.getElementById('card');
+            let startX = 0;
+            let startY = 0;
+
+            card.addEventListener('touchstart', (e) => {
+                startX = e.changedTouches[0].screenX;
+                startY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            card.addEventListener('touchend', (e) => {
+                const endX = e.changedTouches[0].screenX;
+                const endY = e.changedTouches[0].screenY;
+                const diffX = endX - startX;
+                const diffY = endY - startY;
+
+                // Ensure it's a horizontal swipe, not a vertical scroll
+                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        markCard(true); // Swipe Right = Mastered
+                    } else {
+                        markCard(false); // Swipe Left = Review
+                    }
+                }
+            }, { passive: true });
+        }
+
+        function handleKeyPress(e) {
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT') return;
+
+            if (e.code === 'Space') {
+                e.preventDefault();
+                flipCard();
+            } else if (e.code === 'ArrowRight') {
+                markCard(true);
+            } else if (e.code === 'ArrowLeft') {
+                markCard(false);
+            }
+        }
+
+        // Initialize App
+        init();
+    </script>
+</body>
+</html>
